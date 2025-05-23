@@ -6,6 +6,8 @@ export const dataContext = createContext();
 const DataProvider = ({ children }) => {
   const [data, setData] = useState([]);
 
+  console.log("dataContext", data);
+
   return (
     <dataContext.Provider value={{ data, setData }}>
       {children}
