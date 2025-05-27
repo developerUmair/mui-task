@@ -1,5 +1,5 @@
 import React, { useContext } from "react";
-import { dataContext } from "../context/DataContext";
+import { dataContext } from "../context/MoviesDataContext";
 import Table from "@mui/material/Table";
 import TableBody from "@mui/material/TableBody";
 import TableCell from "@mui/material/TableCell";

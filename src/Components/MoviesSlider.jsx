@@ -6,7 +6,6 @@ import { Box, Typography } from "@mui/material";
 import MovieCard from "./MovieCard";
 
 const MoviesSlider = ({ data }) => {
-  console.log("Data in MoviesSlider:", data);
   var settings = {
     infinite: false,
     speed: 500,
