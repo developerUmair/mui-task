@@ -1,5 +1,6 @@
 import axios from "axios";
 import {
+  baseUrl,
   popularMoviesEndPoint,
   topRatedMoviesEndPoint,
   upComingMoviesEndPoint,
@@ -37,7 +38,19 @@ export async function getUpComingMovies() {
 
 export async function getSearchResults({ query }) {
   const result = await get(
-    `https://api.themoviedb.org/3/search/multi?query=${query}&include_adult=false&language=en-US&page=1`
+    `${baseUrl}/search/multi?query=${query}&include_adult=false&language=en-US&page=1`
   );
   return result;
 }
+
+export async function getMovieDetails(id) {
+  const result = await get(`${baseUrl}movie/${id}?language=en-US`);
+  return result;
+}
+
+export async function getCastDetails(id) {
+  const result = await get(`${baseUrl}movie/${id}/credits`);
+  return result;
+}
+
+

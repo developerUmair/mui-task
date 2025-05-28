@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import Slider from "react-slick";
 import {
   Box,
@@ -9,11 +9,11 @@ import {
 } from "@mui/material";
 import SearchIcon from "@mui/icons-material/Search";
 import { keyframes } from "@emotion/react";
-import { getSearchResults } from "../services";
 import Loader from "./Loader";
 import { Background } from "../utils";
 import SectionTitle from "./SectionTitle";
 import MoviesSlider from "./MoviesSlider";
+import { moviesContext } from "../context/MoviesDataContext";
 
 const fadeIn = keyframes`
   from {
@@ -30,44 +30,16 @@ const IMAGE_BASE_URL = "https://image.tmdb.org/t/p/w1280";
 
 const HeroSection = ({ data }) => {
   const [search, setSearch] = useState("");
-  const [loading, setLoading] = useState(false);
-  const [searchResults, setSearchResults] = useState([]);
+  const { searchMovies, searchResults, loading } = useContext(moviesContext);
 
   useEffect(() => {
-    if (search.trim() === "") {
-      setSearchResults([]);
-      setLoading(false);
-      return;
-    }
-
-    const controller = new AbortController();
-    const { signal } = controller;
+    if (search.trim() === "") return;
 
     const timer = setTimeout(() => {
-      setLoading(true);
-      async function fetchSearchResults() {
-        try {
-          const data = await getSearchResults({ query: search });
-          if (!signal.aborted) {
-            setSearchResults(data.results || []);
-          }
-        } catch (err) {
-          if (!signal.aborted) {
-            console.error("Search error:", err);
-          }
-        } finally {
-          if (!signal.aborted) {
-            setLoading(false);
-          }
-        }
-      }
-
-      fetchSearchResults();
-    }, 1000); // 1 second debounce
-
+      searchMovies(search)
+     }, 1000); 
     return () => {
       clearTimeout(timer);
-      controller.abort(); // abort previous request
     };
   }, [search]);
 

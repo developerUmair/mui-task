@@ -6,11 +6,32 @@ import {
   Typography,
   Button,
   IconButton,
+  Drawer,
+  List,
+  ListItem,
+  ListItemText,
+  useTheme,
+  useMediaQuery,
 } from "@mui/material";
 import MovieCreationIcon from "@mui/icons-material/MovieCreation";
+import MenuIcon from "@mui/icons-material/Menu";
 import { Link } from "react-router-dom";
 
 const Navbar = () => {
+  const theme = useTheme();
+  const isMobile = useMediaQuery(theme.breakpoints.down("md"));
+  const [drawerOpen, setDrawerOpen] = React.useState(false);
+
+  const toggleDrawer = (open) => () => {
+    setDrawerOpen(open);
+  };
+
+  const navLinks = [
+    { label: "Popular", to: "/popular" },
+    { label: "Top Rated", to: "/top-rated" },
+    { label: "Upcoming", to: "/upcoming" },
+  ];
+
   return (
     <Box sx={{ flexGrow: 1 }}>
       <AppBar
@@ -37,33 +58,55 @@ const Navbar = () => {
             MovieMania
           </Typography>
 
-          <Box
-            sx={{
-              display: "flex",
-              gap: 2,
-              alignItems: "center",
-              "& button": {
-                fontWeight: 600,
-                letterSpacing: 0.5,
-                color: "white",
-                transition: "all 0.3s ease",
-                "&:hover": {
-                  backgroundColor: "rgba(255,255,255,0.1)",
-                  transform: "scale(1.05)",
+          {isMobile ? (
+            <>
+              <IconButton color="inherit" onClick={toggleDrawer(true)}>
+                <MenuIcon />
+              </IconButton>
+              <Drawer anchor="right" open={drawerOpen} onClose={toggleDrawer(false)}>
+                <Box
+                  sx={{ width: 250 }}
+                  role="presentation"
+                  onClick={toggleDrawer(false)}
+                  onKeyDown={toggleDrawer(false)}
+                >
+                  <List>
+                    {navLinks.map(({ label, to }) => (
+                      <Link to={to} key={to} style={{ textDecoration: "none", color: "inherit" }}>
+                        <ListItem button>
+                          <ListItemText primary={label} />
+                        </ListItem>
+                      </Link>
+                    ))}
+                  </List>
+                </Box>
+              </Drawer>
+            </>
+          ) : (
+            <Box
+              sx={{
+                display: "flex",
+                gap: 2,
+                alignItems: "center",
+                "& button": {
+                  fontWeight: 600,
+                  letterSpacing: 0.5,
+                  color: "white",
+                  transition: "all 0.3s ease",
+                  "&:hover": {
+                    backgroundColor: "rgba(255,255,255,0.1)",
+                    transform: "scale(1.05)",
+                  },
                 },
-              },
-            }}
-          >
-            <Link to="/popular" style={{ textDecoration: "none" }}>
-              <Button color="inherit">Popular</Button>
-            </Link>
-            <Link to="/top-rated" style={{ textDecoration: "none" }}>
-              <Button color="inherit">Top Rated</Button>
-            </Link>
-            <Link to="/upcoming" style={{ textDecoration: "none" }}>
-              <Button color="inherit">Upcoming</Button>
-            </Link>
-          </Box>
+              }}
+            >
+              {navLinks.map(({ label, to }) => (
+                <Link to={to} key={to} style={{ textDecoration: "none" }}>
+                  <Button color="inherit">{label}</Button>
+                </Link>
+              ))}
+            </Box>
+          )}
         </Toolbar>
       </AppBar>
     </Box>

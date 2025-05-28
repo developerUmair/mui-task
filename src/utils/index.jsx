@@ -8,3 +8,34 @@ import styled from "styled-components";
     color: "#fff",
     minHeight: "100vh",
   }));
+
+
+export const formatDate = (dateString) => {
+  if (!dateString) return null;
+
+  try {
+    return new Date(dateString).toLocaleDateString(undefined, {
+      day: "numeric",
+      month: "short",
+      year: "numeric",
+    });
+  } catch (error) {
+    console.error("Invalid date:", dateString);
+    return null;
+  }
+};
+
+
+export const formatRuntime = (totalMinutes) => {
+  if (!totalMinutes || isNaN(totalMinutes)) return null;
+
+  const hours = Math.floor(totalMinutes / 60);
+  const minutes = totalMinutes % 60;
+
+  let result = '';
+  if (hours > 0) result += `${hours}h`;
+  if (minutes > 0) result += (hours > 0 ? ' ' : '') + `${minutes} mins`;
+
+  return result.trim();
+};
+

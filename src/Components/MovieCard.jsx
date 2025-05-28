@@ -1,4 +1,3 @@
-import React from "react";
 import {
   Card,
   CardMedia,
@@ -10,11 +9,18 @@ import {
   Button,
   Rating,
 } from "@mui/material";
-import PlayArrowIcon from "@mui/icons-material/PlayArrow";
 import PlaylistAddIcon from "@mui/icons-material/PlaylistAdd";
+import { useNavigate } from "react-router-dom";
+import { formatDate } from "../utils";
 
 const MovieCard = ({ movie }) => {
-  const handleAdd = () => alert(`${movie.title} added to watchlist!`);
+  const navigate = useNavigate();
+
+  const handleRedirect = () => {
+    if (movie?.id) {
+      navigate(`/movie/${movie.id}`);
+    }
+  };
 
   return (
     <Box
@@ -24,6 +30,7 @@ const MovieCard = ({ movie }) => {
         m: 3,
         perspective: 1000,
       }}
+      onClick={handleRedirect}
     >
       <Card
         sx={{
@@ -126,17 +133,13 @@ const MovieCard = ({ movie }) => {
                   textShadow: "1px 1px 3px rgba(0,0,0,0.7)",
                 }}
               >
-                {new Date(movie?.release_date).toLocaleDateString(undefined, {
-                  year: "numeric",
-                  month: "short",
-                  day: "numeric",
-                })}
+                {movie?.release_date &&
+                  formatDate(movie?.release_date)}
               </Typography>
 
               <Tooltip title="Add to Watchlist">
                 <IconButton
                   color="secondary"
-                  onClick={handleAdd}
                   sx={{
                     borderRadius: 3,
                     border: "1px solid",

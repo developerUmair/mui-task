@@ -1,61 +1,19 @@
-import { useEffect, useState } from "react";
+import { useContext } from "react";
 import HeroSection from "./Components/HeroSection";
+import Toggle from "./Components/Toggle";
 import "./App.css";
 import SectionTitle from "./Components/SectionTitle";
 import MoviesSlider from "./Components/MoviesSlider";
-import { Box } from "@mui/material";
-import styled from "styled-components";
-import {
-  getPopularMovies,
-  getTopRatedMovies,
-  getUpComingMovies,
-} from "./services";
 import Loader from "./Components/Loader";
 import Layout from "./Layout";
 import { Route, Routes } from "react-router-dom";
 import { Background } from "./utils";
+import { moviesContext } from "./context/MoviesDataContext";
+import MovieDetails from "./pages/MovieDetails";
 
 function App() {
-  const [popularMovies, setPopularMovies] = useState([]);
-  const [topRatedMovies, setTopRatedMovies] = useState([]);
-  const [upComingMovies, setUpComingMovies] = useState([]);
-  const [popularLoading, setPopularLoading] = useState(true);
-  const [topRatedLoading, setTopRatedLoading] = useState(true);
-  const [upComingLoading, setUpComingLoading] = useState(true);
-
-  useEffect(() => {
-    setPopularLoading(true);
-    async function fetchPopularMovies() {
-      const data = await getPopularMovies();
-      setPopularMovies(data.results);
-      setPopularLoading(false);
-    }
-
-    fetchPopularMovies();
-  }, []);
-
-  useEffect(() => {
-    setTopRatedLoading(true);
-    async function fetchTopRatedMovies() {
-      const data = await getTopRatedMovies();
-      setTopRatedMovies(data.results);
-      setTopRatedLoading(false);
-    }
-
-    fetchTopRatedMovies();
-  }, []);
-
-  useEffect(() => {
-    setUpComingLoading(true);
-    async function fetchUpComingMovies() {
-      const data = await getUpComingMovies();
-      setUpComingMovies(data.results);
-      setUpComingLoading(false);
-    }
-
-    fetchUpComingMovies();
-  }, []);
-
+  const { popularMovies, topRatedMovies, upComingMovies, loading } =
+    useContext(moviesContext);
 
   return (
     <Layout>
@@ -66,11 +24,7 @@ function App() {
           element={
             <Background>
               <SectionTitle title="Popular" />
-              {popularLoading ? (
-                <Loader />
-              ) : (
-                <MoviesSlider data={popularMovies} />
-              )}
+              {loading ? <Loader /> : <MoviesSlider data={popularMovies} />}
             </Background>
           }
         />
@@ -80,11 +34,7 @@ function App() {
           element={
             <Background>
               <SectionTitle title="Top Rated" />
-              {topRatedLoading ? (
-                <Loader />
-              ) : (
-                <MoviesSlider data={topRatedMovies} />
-              )}
+              {loading ? <Loader /> : <MoviesSlider data={topRatedMovies} />}
             </Background>
           }
         />
@@ -93,14 +43,12 @@ function App() {
           element={
             <Background>
               <SectionTitle title="Up Coming" />
-              {upComingLoading ? (
-                <Loader />
-              ) : (
-                <MoviesSlider data={upComingMovies} />
-              )}
+              {loading ? <Loader /> : <MoviesSlider data={upComingMovies} />}
             </Background>
           }
         />
+
+        <Route path="/movie/:id" element={<MovieDetails />} />
       </Routes>
     </Layout>
   );
