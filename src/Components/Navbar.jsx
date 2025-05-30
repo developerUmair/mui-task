@@ -29,7 +29,7 @@ const Navbar = () => {
   const navLinks = [
     { label: "Popular", to: "/popular" },
     { label: "Top Rated", to: "/top-rated" },
-    { label: "Upcoming", to: "/upcoming" },
+    { label: "Trending", to: "/trending" },
   ];
 
   return (

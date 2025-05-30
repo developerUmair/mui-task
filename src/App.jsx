@@ -12,8 +12,16 @@ import { moviesContext } from "./context/MoviesDataContext";
 import MovieDetails from "./pages/MovieDetails";
 
 function App() {
-  const { popularMovies, topRatedMovies, upComingMovies, loading } =
-    useContext(moviesContext);
+  const {
+    popularMovies,
+    topRatedMovies,
+    upComingMovies,
+    loading,
+    category,
+    setCategory,
+    range,
+    setRange,
+  } = useContext(moviesContext);
 
   return (
     <Layout>
@@ -23,7 +31,16 @@ function App() {
           path="/popular"
           element={
             <Background>
-              <SectionTitle title="Popular" />
+              <SectionTitle
+                title="Popular"
+                options={[
+                  { title: "Movies", value: "movie" },
+                  { title: "TV Shows", value: "tv" },
+                ]}
+                showToggle={true}
+                selectedOption={category}
+                setSelectedOption={setCategory}
+              />
               {loading ? <Loader /> : <MoviesSlider data={popularMovies} />}
             </Background>
           }
@@ -33,16 +50,34 @@ function App() {
           path="/top-rated"
           element={
             <Background>
-              <SectionTitle title="Top Rated" />
+              <SectionTitle
+                title="Top Rated"
+                options={[
+                  { title: "Movies", value: "movie" },
+                  { title: "TV Shows", value: "tv" },
+                ]}
+                showToggle={true}
+                selectedOption={category}
+                setSelectedOption={setCategory}
+              />
               {loading ? <Loader /> : <MoviesSlider data={topRatedMovies} />}
             </Background>
           }
         />
         <Route
-          path="/upcoming"
+          path="/trending"
           element={
             <Background>
-              <SectionTitle title="Up Coming" />
+              <SectionTitle
+                title="Trending"
+                options={[
+                  { title: "Day", value: "day" },
+                  { title: "Week", value: "week" },
+                ]}
+                showToggle={true}
+                selectedOption={range}
+                setSelectedOption={setRange}
+              />
               {loading ? <Loader /> : <MoviesSlider data={upComingMovies} />}
             </Background>
           }

@@ -1,13 +1,9 @@
-import { useEffect, useState } from "react";
-import { createContext } from "react";
+import { useEffect, useState, createContext } from "react";
 import {
   getPopular,
-  getPopularMovies,
   getSearchResults,
   getTopRated,
-  getTopRatedMovies,
   getTrending,
-  getUpComingMovies,
 } from "../services";
 
 export const moviesContext = createContext();
@@ -17,34 +13,50 @@ const MovieProvider = ({ children }) => {
   const [range, setRange] = useState({ title: "Day", value: "day" });
   const [popularMovies, setPopularMovies] = useState([]);
   const [topRatedMovies, setTopRatedMovies] = useState([]);
-  const [upComingMovies, setUpComingMovies] = useState([]);
+  const [trendingMovies, setTrendingMovies] = useState([]);
   const [searchResults, setSearchResults] = useState([]);
   const [loading, setLoading] = useState(true);
 
+  // Fetch category-based movies (popular, top-rated)
   useEffect(() => {
-    const fetchAll = async () => {
+    const fetchCategoryBased = async () => {
       try {
         setLoading(true);
-        const [popularData, topRatedData, upComingData] =
-          await Promise.allSettled([
-            getPopular({ category: category.value }),
-            getTopRated({category: category.value }),
-            getTrending({range: range.value }),
-          ]);
+        const [popularData, topRatedData] = await Promise.allSettled([
+          getPopular({ category: category.value }),
+          getTopRated({ category: category.value }),
+        ]);
 
-        setPopularMovies(popularData?.value.results);
-        setTopRatedMovies(topRatedData?.value.results);
-        setUpComingMovies(upComingData?.value.results);
+        setPopularMovies(popularData?.value.results || []);
+        setTopRatedMovies(topRatedData?.value.results || []);
       } catch (error) {
-        console.error("Error fetching movies:", error);
+        console.error("Category Fetch Error:", error);
       } finally {
         setLoading(false);
       }
     };
 
-    fetchAll();
-  }, [category, range]);
+    fetchCategoryBased();
+  }, [category]);
 
+  // Fetch range-based movies (trending)
+  useEffect(() => {
+    const fetchTrending = async () => {
+      try {
+        setLoading(true);
+        const trendingData = await getTrending({ range: range.value });
+        setTrendingMovies(trendingData.results || []);
+      } catch (error) {
+        console.error("Trending Fetch Error:", error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchTrending();
+  }, [range]);
+
+  // Search API
   const searchMovies = async (query) => {
     if (!query) return;
     setLoading(true);
@@ -63,7 +75,7 @@ const MovieProvider = ({ children }) => {
       value={{
         popularMovies,
         topRatedMovies,
-        upComingMovies,
+        trendingMovies,
         loading,
         searchMovies,
         searchResults,

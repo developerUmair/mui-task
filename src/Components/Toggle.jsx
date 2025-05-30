@@ -1,12 +1,9 @@
-import { useState } from "react";
 import { Box, Button } from "@mui/material";
 
-const Toggle = ({ options = [], defaultActive = "", onChange }) => {
-  const [active, setActive] = useState(defaultActive || options[0]);
-
-  const handleToggle = (value) => {
-    setActive(value);
-    if (onChange) onChange(value);
+const Toggle = ({ options = [], active = "", onChange }) => {
+  
+  const handleToggle = (option) => {
+    if (onChange) onChange(option);
   };
 
   return (
@@ -20,11 +17,12 @@ const Toggle = ({ options = [], defaultActive = "", onChange }) => {
     >
       {options.map((option) => (
         <Button
-          key={option}
+          key={option.value}
           onClick={() => handleToggle(option)}
           sx={{
-            color: active === option ? "#fff" : "#000",
-            backgroundColor: active === option ? "#1976d2" : "transparent",
+            color: active === option.value ? "#fff" : "#000",
+            backgroundColor:
+              active === option.value ? "#1976d2" : "transparent",
             borderRadius: "30px",
             textTransform: "none",
             px: 3,
@@ -33,7 +31,7 @@ const Toggle = ({ options = [], defaultActive = "", onChange }) => {
             boxShadow: "none",
           }}
         >
-          {option.charAt(0).toUpperCase() + option.slice(1)}
+          {option.title}
         </Button>
       ))}
     </Box>

@@ -88,7 +88,7 @@ const MovieCard = ({ movie }) => {
                 textShadow: "2px 2px 6px rgba(0,0,0,0.9)",
               }}
             >
-              {movie?.original_title}
+              {movie?.original_title || movie?.original_name} 
             </Typography>
 
             <Box

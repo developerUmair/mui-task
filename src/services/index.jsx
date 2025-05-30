@@ -1,8 +1,11 @@
 import axios from "axios";
 import {
   baseUrl,
+  PopularEndPoint,
   popularMoviesEndPoint,
+  topRatedEndPoint,
   topRatedMoviesEndPoint,
+  trendingEndPoint,
   upComingMoviesEndPoint,
 } from "../EndPoints";
 
@@ -53,4 +56,16 @@ export async function getCastDetails(id) {
   return result;
 }
 
+export async function getPopular({ category = "movie" }) {
+  const result = await get(PopularEndPoint(category));
+  return result;
+}
 
+export async function getTopRated({ category = "movie" }) {
+  const result = await get(topRatedEndPoint(category));
+  return result;
+}
+export async function getTrending({ range = "day" }) {
+  const result = await get(trendingEndPoint(range));
+  return result;
+}
