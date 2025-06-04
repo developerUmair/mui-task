@@ -1,10 +1,13 @@
-import { useContext } from "react";
 import { Box, Container, Typography } from "@mui/material";
 import Toggle from "./Toggle";
-import { moviesContext } from "../context/MoviesDataContext";
 
-const SectionTitle = ({ title, options = [], showToggle = false, selectedOption, setSelectedOption }) => {
-
+const SectionTitle = ({
+  title,
+  options = [],
+  showToggle = false,
+  selectedOption,
+  setSelectedOption,
+}) => {
   return (
     <Container maxWidth="lg" disableGutters>
       <Box
@@ -15,6 +18,10 @@ const SectionTitle = ({ title, options = [], showToggle = false, selectedOption,
         sx={{
           padding: "20px",
           borderRadius: "12px",
+          flexDirection: {
+            xs: "column",
+            sm: "row",
+          },
         }}
       >
         <Typography

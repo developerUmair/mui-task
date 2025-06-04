@@ -18,7 +18,8 @@ const MovieCard = ({ movie }) => {
 
   const handleRedirect = () => {
     if (movie?.id) {
-      navigate(`/movie/${movie.id}`);
+      const mediaType = movie?.title || movie?.original_title ? "movie" : "tv";
+      navigate(`/${mediaType}/${movie.id}`);
     }
   };
 
@@ -53,6 +54,7 @@ const MovieCard = ({ movie }) => {
         <Box sx={{ position: "relative", height: "100%" }}>
           <CardMedia
             component="img"
+            loading="lazy"
             image={`https://image.tmdb.org/t/p/w500${movie?.poster_path}`}
             alt={movie?.original_title}
             sx={{
@@ -88,7 +90,7 @@ const MovieCard = ({ movie }) => {
                 textShadow: "2px 2px 6px rgba(0,0,0,0.9)",
               }}
             >
-              {movie?.original_title || movie?.original_name} 
+              {movie?.original_title || movie?.original_name}
             </Typography>
 
             <Box
@@ -133,8 +135,7 @@ const MovieCard = ({ movie }) => {
                   textShadow: "1px 1px 3px rgba(0,0,0,0.7)",
                 }}
               >
-                {movie?.release_date &&
-                  formatDate(movie?.release_date)}
+                {movie?.release_date && formatDate(movie?.release_date)}
               </Typography>
 
               <Tooltip title="Add to Watchlist">

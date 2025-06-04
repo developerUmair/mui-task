@@ -10,15 +10,20 @@ import { Route, Routes } from "react-router-dom";
 import { Background } from "./utils";
 import { moviesContext } from "./context/MoviesDataContext";
 import MovieDetails from "./pages/MovieDetails";
+import Explore from "./pages/Explore";
+import Movies from "./pages/Movies";
+import TvShows from "./pages/TvShows";
 
 function App() {
   const {
     popularMovies,
     topRatedMovies,
-    upComingMovies,
+    trendingMovies,
     loading,
-    category,
-    setCategory,
+    popularCategory,
+    setPopularCategory,
+    topRatedCategory,
+    setTopRatedCategory,
     range,
     setRange,
   } = useContext(moviesContext);
@@ -38,8 +43,8 @@ function App() {
                   { title: "TV Shows", value: "tv" },
                 ]}
                 showToggle={true}
-                selectedOption={category}
-                setSelectedOption={setCategory}
+                selectedOption={popularCategory}
+                setSelectedOption={setPopularCategory}
               />
               {loading ? <Loader /> : <MoviesSlider data={popularMovies} />}
             </Background>
@@ -57,8 +62,8 @@ function App() {
                   { title: "TV Shows", value: "tv" },
                 ]}
                 showToggle={true}
-                selectedOption={category}
-                setSelectedOption={setCategory}
+                selectedOption={topRatedCategory}
+                setSelectedOption={setTopRatedCategory}
               />
               {loading ? <Loader /> : <MoviesSlider data={topRatedMovies} />}
             </Background>
@@ -78,12 +83,19 @@ function App() {
                 selectedOption={range}
                 setSelectedOption={setRange}
               />
-              {loading ? <Loader /> : <MoviesSlider data={upComingMovies} />}
+              {loading ? <Loader /> : <MoviesSlider data={trendingMovies} />}
             </Background>
           }
         />
 
         <Route path="/movie/:id" element={<MovieDetails />} />
+        <Route path="/tv/:id" element={<MovieDetails />} />
+
+        {/* Explore routes */}
+        <Route path="/explore" element={<Explore />}>
+          <Route path="movies" element={<Movies />} />
+          <Route path="tv" element={<TvShows />} />
+        </Route>
       </Routes>
     </Layout>
   );

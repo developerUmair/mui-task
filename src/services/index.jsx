@@ -1,12 +1,15 @@
 import axios from "axios";
 import {
   baseUrl,
+  discoverMoviesAndTvEndPoint,
+  genreListEndPoint,
   PopularEndPoint,
   popularMoviesEndPoint,
   topRatedEndPoint,
   topRatedMoviesEndPoint,
   trendingEndPoint,
   upComingMoviesEndPoint,
+  videosEndPoint,
 } from "../EndPoints";
 
 export async function get(endPoint) {
@@ -46,8 +49,8 @@ export async function getSearchResults({ query }) {
   return result;
 }
 
-export async function getMovieDetails(id) {
-  const result = await get(`${baseUrl}movie/${id}?language=en-US`);
+export async function getMovieDetails({ id, category = "movie" }) {
+  const result = await get(`${baseUrl}${category}/${id}?language=en-US`);
   return result;
 }
 
@@ -67,5 +70,20 @@ export async function getTopRated({ category = "movie" }) {
 }
 export async function getTrending({ range = "day" }) {
   const result = await get(trendingEndPoint(range));
+  return result;
+}
+
+export async function getVideos({id, mediaType = "movie"}) {
+  const result = await get(videosEndPoint({id, mediaType}));
+  return result;
+}
+
+export async function getGenras(mediaType = "movie") {
+  const result = await get(genreListEndPoint(mediaType));
+  return result;
+}
+
+export async function getDiscoveredMoviesAndTvShows({mediaType = "movie", page = 1, genres=""}) {
+  const result = await get(discoverMoviesAndTvEndPoint({mediaType, page, genres}));
   return result;
 }

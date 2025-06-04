@@ -30,6 +30,8 @@ const Navbar = () => {
     { label: "Popular", to: "/popular" },
     { label: "Top Rated", to: "/top-rated" },
     { label: "Trending", to: "/trending" },
+    { label: "Movies", to: "/explore/movies" },
+    { label: "Tv Shows", to: "/explore/tv" },
   ];
 
   return (
@@ -42,39 +44,95 @@ const Navbar = () => {
         }}
       >
         <Toolbar>
-          <IconButton size="large" edge="start" color="inherit" sx={{ mr: 1 }}>
-            <MovieCreationIcon fontSize="large" />
-          </IconButton>
-          <Typography
-            variant="h5"
-            component="div"
-            sx={{
+          <Link
+            to="/"
+            style={{
+              display: "flex",
+              alignItems: "center",
+              textDecoration: "none",
+              color: "inherit",
               flexGrow: 1,
-              fontWeight: 700,
-              letterSpacing: 1,
-              color: "white",
             }}
           >
-            MovieMania
-          </Typography>
+            <IconButton
+              size="large"
+              edge="start"
+              color="inherit"
+              sx={{ mr: 1 }}
+            >
+              <MovieCreationIcon fontSize="large" />
+            </IconButton>
+            <Typography
+              variant="h5"
+              component="div"
+              sx={{
+                fontWeight: 700,
+                letterSpacing: 1,
+                color: "white",
+              }}
+            >
+              MovieMania
+            </Typography>
+          </Link>
 
           {isMobile ? (
             <>
               <IconButton color="inherit" onClick={toggleDrawer(true)}>
                 <MenuIcon />
               </IconButton>
-              <Drawer anchor="right" open={drawerOpen} onClose={toggleDrawer(false)}>
+              <Drawer
+                anchor="right"
+                open={drawerOpen}
+                onClose={toggleDrawer(false)}
+                PaperProps={{
+                  sx: {
+                    width: 250,
+                    background:
+                      "linear-gradient(180deg, #0f2027, #203a43, #2c5364)",
+                    color: "white",
+                    boxShadow: "0 8px 24px rgba(0, 0, 0, 0.5)",
+                    paddingY: 2,
+                  },
+                }}
+              >
                 <Box
-                  sx={{ width: 250 }}
+                  sx={{ width: "100%" }}
                   role="presentation"
                   onClick={toggleDrawer(false)}
                   onKeyDown={toggleDrawer(false)}
                 >
+                  <Box sx={{ px: 2, mb: 2 }}>
+                    <Typography variant="h6" fontWeight={700} letterSpacing={1}>
+                      Movie Mania
+                    </Typography>
+                  </Box>
+
                   <List>
                     {navLinks.map(({ label, to }) => (
-                      <Link to={to} key={to} style={{ textDecoration: "none", color: "inherit" }}>
-                        <ListItem button>
-                          <ListItemText primary={label} />
+                      <Link
+                        to={to}
+                        key={to}
+                        style={{ textDecoration: "none", color: "inherit" }}
+                      >
+                        <ListItem
+                          button
+                          sx={{
+                            "&:hover": {
+                              backgroundColor: "rgba(255, 255, 255, 0.1)",
+                              transform: "scale(1.02)",
+                              transition: "all 0.3s ease",
+                            },
+                            mx: 1,
+                            borderRadius: 1,
+                          }}
+                        >
+                          <ListItemText
+                            primary={label}
+                            primaryTypographyProps={{
+                              fontWeight: 500,
+                              letterSpacing: 0.5,
+                            }}
+                          />
                         </ListItem>
                       </Link>
                     ))}

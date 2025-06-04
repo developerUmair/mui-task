@@ -1,3 +1,4 @@
+/* eslint-disable react-refresh/only-export-components */
 import { useEffect, useState, createContext } from "react";
 import {
   getPopular,
@@ -39,7 +40,7 @@ const MovieProvider = ({ children }) => {
     fetchCategoryBased();
   }, [category]);
 
-  // Fetch range-based movies (trending)
+  
   useEffect(() => {
     const fetchTrending = async () => {
       try {

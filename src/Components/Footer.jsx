@@ -17,6 +17,7 @@ const Footer = () => {
         sx={{
           display: "flex",
           justifyContent: "space-between",
+          alignItems: "center",
           flexWrap: "wrap",
         }}
       >
@@ -26,16 +27,27 @@ const Footer = () => {
             Your daily dose of movies
           </Typography>
         </Box>
-        <Box sx={{ display: "flex", gap: 2 }}>
-          <Link href="#" color="gray" underline="hover">
-            Home
-          </Link>
-          <Link href="#" color="gray" underline="hover">
-            About
-          </Link>
-          <Link href="#" color="gray" underline="hover">
-            Contact
-          </Link>
+        <Box sx={{ display: "flex", gap: 3 }}>
+          {["Home", "About", "Contact"].map((text) => (
+            <Link
+              key={text}
+              href="#"
+              underline="none"
+              sx={{
+                color: "gray",
+                fontWeight: 500,
+                letterSpacing: 0.5,
+                transition: "all 0.3s ease",
+                "&:hover": {
+                  color: "white",
+                  transform: "scale(1.05)",
+                  textDecoration: "underline",
+                },
+              }}
+            >
+              {text}
+            </Link>
+          ))}
         </Box>
       </Container>
     </Box>

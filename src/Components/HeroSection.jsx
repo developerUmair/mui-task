@@ -112,7 +112,6 @@ const HeroSection = ({ data }) => {
             display: "flex",
             alignItems: "center",
             justifyContent: "center",
-            px: 2,
             color: "white",
             textAlign: "center",
             zIndex: 2,

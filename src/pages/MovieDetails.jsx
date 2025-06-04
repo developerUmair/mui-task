@@ -10,17 +10,29 @@ import {
 } from "@mui/material";
 import PlayCircleOutlineOutlinedIcon from "@mui/icons-material/PlayCircleOutlineOutlined";
 import StarBorderRoundedIcon from "@mui/icons-material/StarBorderRounded";
-import { useParams } from "react-router-dom";
+import { useLocation, useParams } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { getCastDetails, getMovieDetails } from "../services";
 import { formatDate, formatRuntime } from "../utils";
+import TrailerModal from "../Components/TrailerModal";
 
 const MovieDetails = () => {
   const { id } = useParams();
+  const location = useLocation();
+  const mediaType = location.pathname.includes("/tv/") ? "tv" : "movie";
+
   const [movie, setMovie] = useState({});
   const [castDetails, setCastDetails] = useState([]);
   const [crewDetails, setCrewDetails] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [openModal, setOpenModal] = useState(false);
+
+  const handleModalClose = () => {
+    setOpenModal(false);
+  };
+  const handleModalOpen = () => {
+    setOpenModal(true);
+  };
 
   const directors = castDetails?.filter((person) =>
     person?.known_for_department?.includes("Directing")
@@ -34,7 +46,7 @@ const MovieDetails = () => {
       try {
         setLoading(true);
         const [movieDetailsData, castDetailsData] = await Promise.allSettled([
-          getMovieDetails(id),
+          getMovieDetails({ id, category: mediaType }),
           getCastDetails(id),
         ]);
 
@@ -112,7 +124,7 @@ const MovieDetails = () => {
 
             <Grid item xs={12} md={7} lg={8}>
               <Typography variant="h4" fontWeight="bold">
-                {movie?.title}
+                {movie?.title || movie?.name}
               </Typography>
 
               <Typography variant="subtitle1" fontStyle="italic" color="gray">
@@ -138,10 +150,12 @@ const MovieDetails = () => {
                   startIcon={<PlayCircleOutlineOutlinedIcon />}
                   variant="outlined"
                   sx={{ color: "#fff", borderColor: "#fff" }}
+                  onClick={handleModalOpen}
                 >
                   Watch Trailer
                 </Button>
               </Stack>
+              <TrailerModal onClose={handleModalClose} open={openModal} id={id} mediaType={mediaType} />
 
               <Box my={3}>
                 <Typography variant="h6" fontWeight="bold">
@@ -158,14 +172,18 @@ const MovieDetails = () => {
                   <strong>Status:</strong> {movie?.status || "N/A"}
                 </Typography>
 
-                <Typography>
-                  <strong>Release Date:</strong>{" "}
-                  {formatDate(movie?.release_date) || "N/A"}
-                </Typography>
-                <Typography>
-                  <strong>Runtime:</strong>{" "}
-                  {formatRuntime(movie?.runtime) || "N/A"}
-                </Typography>
+                {movie?.release_date && (
+                  <Typography>
+                    <strong>Release Date:</strong>{" "}
+                    {formatDate(movie?.release_date) || "N/A"}
+                  </Typography>
+                )}
+                {movie?.runtime && (
+                  <Typography>
+                    <strong>Runtime:</strong>{" "}
+                    {formatRuntime(movie?.runtime) || "N/A"}
+                  </Typography>
+                )}
               </Stack>
 
               {directors?.length > 0 && (
@@ -184,15 +202,34 @@ const MovieDetails = () => {
                   </Typography>{" "}
                 </>
               )}
-              <Divider sx={{ borderColor: "#555", my: 2 }} />
-              <Typography mt={2}>
-                <strong>Writer:</strong>{" "}
-                {writers?.length > 0
-                  ? [...new Set(writers.map((writer) => writer?.name))].join(
-                      ", "
-                    )
-                  : "N/A"}
-              </Typography>
+              {writers?.length > 0 && (
+                <>
+                  <Divider sx={{ borderColor: "#555", my: 2 }} />
+                  <Typography mt={2}>
+                    <strong>Writer:</strong>{" "}
+                    {writers?.length > 0
+                      ? [
+                          ...new Set(writers.map((writer) => writer?.name)),
+                        ].join(", ")
+                      : "N/A"}
+                  </Typography>
+                </>
+              )}
+              {movie?.created_by?.length > 0 && (
+                <>
+                  <Divider sx={{ borderColor: "#555", my: 2 }} />
+                  <Typography mt={2}>
+                    <strong>Created:</strong>{" "}
+                    {movie?.created_by?.length > 0
+                      ? [
+                          ...new Set(
+                            movie?.created_by?.map((creator) => creator?.name)
+                          ),
+                        ].join(", ")
+                      : "N/A"}
+                  </Typography>
+                </>
+              )}
             </Grid>
           </Grid>
         </Box>

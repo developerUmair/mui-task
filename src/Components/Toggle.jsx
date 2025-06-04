@@ -22,7 +22,7 @@ const Toggle = ({ options = [], active = "", onChange }) => {
           sx={{
             color: active === option.value ? "#fff" : "#000",
             backgroundColor:
-              active === option.value ? "#1976d2" : "transparent",
+              active === option.value ? "#203a43" : "transparent",
             borderRadius: "30px",
             textTransform: "none",
             px: 3,
