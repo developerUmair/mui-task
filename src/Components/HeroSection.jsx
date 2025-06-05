@@ -14,6 +14,7 @@ import { Background } from "../utils";
 import SectionTitle from "./SectionTitle";
 import MoviesSlider from "./MoviesSlider";
 import { moviesContext } from "../context/MoviesDataContext";
+import ClearRoundedIcon from "@mui/icons-material/ClearRounded";
 
 const fadeIn = keyframes`
   from {
@@ -36,8 +37,8 @@ const HeroSection = ({ data }) => {
     if (search.trim() === "") return;
 
     const timer = setTimeout(() => {
-      searchMovies(search)
-     }, 1000); 
+      searchMovies(search);
+    }, 1000);
     return () => {
       clearTimeout(timer);
     };
@@ -45,6 +46,10 @@ const HeroSection = ({ data }) => {
 
   const handleSearchChange = (event) => {
     setSearch(event.target.value);
+  };
+
+  const handleClearSearch = () => {
+    setSearch("");
   };
 
   const settings = {
@@ -136,6 +141,16 @@ const HeroSection = ({ data }) => {
                 startAdornment: (
                   <InputAdornment position="start">
                     <SearchIcon />
+                  </InputAdornment>
+                ),
+                endAdornment: (
+                  <InputAdornment position="end">
+                    {search?.length > 0 ? (
+                      <ClearRoundedIcon
+                        onClick={handleClearSearch}
+                        sx={{ cursor: "pointer" }}
+                      />
+                    ) : null}
                   </InputAdornment>
                 ),
                 sx: {

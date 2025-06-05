@@ -83,7 +83,7 @@ export async function getGenras(mediaType = "movie") {
   return result;
 }
 
-export async function getDiscoveredMoviesAndTvShows({mediaType = "movie", page = 1, genres=""}) {
-  const result = await get(discoverMoviesAndTvEndPoint({mediaType, page, genres}));
+export async function getDiscoveredMoviesAndTvShows({mediaType = "movie", page = 1, genres="" , ratingGt="", ratingLt=""}) {
+  const result = await get(discoverMoviesAndTvEndPoint({mediaType, page, genres, ratingGt, ratingLt}));
   return result;
 }

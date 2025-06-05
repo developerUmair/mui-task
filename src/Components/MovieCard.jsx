@@ -55,7 +55,11 @@ const MovieCard = ({ movie }) => {
           <CardMedia
             component="img"
             loading="lazy"
-            image={`https://image.tmdb.org/t/p/w500${movie?.poster_path}`}
+            image={
+              movie?.poster_path?.length > 0
+                ? `https://image.tmdb.org/t/p/w500${movie.poster_path}`
+                : "https://placehold.co/300x400"
+            }
             alt={movie?.original_title}
             sx={{
               height: "100%",

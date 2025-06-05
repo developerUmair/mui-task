@@ -26,11 +26,8 @@ export const genreListEndPoint = (mediaType = "movie") => {
   return `${baseUrl}genre/${mediaType}/list?language=en-US`;
 };
 
-export const discoverMoviesAndTvEndPoint = ({mediaType = "movie", page=1, genres=""}) => {
-  console.log('genres:', genres);
-  return `${baseUrl}discover/${mediaType}?include_adult=false&include_video=false&language=en-US&page=${page}&with_genres=${genres}`;
+export const discoverMoviesAndTvEndPoint = ({mediaType = "movie", page=1, genres="", ratingGt="", ratingLt="" }) => {
+  return `${baseUrl}discover/${mediaType}?include_adult=false&include_video=false&language=en-US&page=${page}&with_genres=${genres}&vote_average.gte=${ratingGt}&vote_average.lte=${ratingLt}`;
 };
-
-// https://api.themoviedb.org/3/discover/movie?include_adult=false&include_video=false&language=en-US&page=1&sort_by=vote_average.desc&with_genres=35%2C%2099%2C%2080';
 
 
