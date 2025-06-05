@@ -1,6 +1,5 @@
 import { useContext } from "react";
 import HeroSection from "./Components/HeroSection";
-import Toggle from "./Components/Toggle";
 import "./App.css";
 import SectionTitle from "./Components/SectionTitle";
 import MoviesSlider from "./Components/MoviesSlider";
@@ -13,6 +12,10 @@ import MovieDetails from "./pages/MovieDetails";
 import Explore from "./pages/Explore";
 import Movies from "./pages/Movies";
 import TvShows from "./pages/TvShows";
+import SignUp from "./pages/SignUp";
+import AuthLayout from "./AuthLayout";
+import ProtectedRoute from "./Components/ProtectedRoute";
+import SignIn from "./pages/Signin";
 
 function App() {
   const {
@@ -29,8 +32,8 @@ function App() {
   } = useContext(moviesContext);
 
   return (
-    <Layout>
-      <Routes>
+    <Routes>
+      <Route element={<ProtectedRoute><Layout /></ProtectedRoute>}>
         <Route path="/" element={<HeroSection data={popularMovies} />} />
         <Route
           path="/popular"
@@ -96,8 +99,14 @@ function App() {
           <Route path="movies" element={<Movies />} />
           <Route path="tv" element={<TvShows />} />
         </Route>
-      </Routes>
-    </Layout>
+      </Route>
+
+      {/* Auth routes */}
+      <Route element={<AuthLayout />}>
+        <Route path="/auth/sign-up" element={<SignUp />} />
+        <Route path="/auth/sign-in" element={<SignIn />} />
+      </Route>
+    </Routes>
   );
 }
 

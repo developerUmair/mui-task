@@ -1,16 +1,12 @@
 import { Container } from "@mui/material";
-import Navbar from "./Components/Navbar";
-import Footer from "./Components/Footer";
 import { Outlet } from "react-router-dom";
 
-const Layout = () => {
+const AuthLayout = () => {
   return (
     <Container maxWidth="xl" disableGutters>
-      <Navbar />
       <Outlet />
-      <Footer />
     </Container>
   );
 };
 
-export default Layout;
+export default AuthLayout;

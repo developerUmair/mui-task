@@ -7,6 +7,7 @@ import styled from "styled-components";
 
     color: "#fff",
     minHeight: "100vh",
+     width: "100%",
   }));
 
 

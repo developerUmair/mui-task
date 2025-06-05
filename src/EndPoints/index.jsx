@@ -1,5 +1,7 @@
 export const baseUrl = import.meta.env.VITE_TMDB_API_URL;
 
+export const authBaseUrl = import.meta.env.VITE_AUTH_API_URL;
+
 // Popular movies
 export const popularMoviesEndPoint = `${baseUrl}movie/popular?language=en-US&page=1`;
 export const topRatedMoviesEndPoint = `${baseUrl}movie/top_rated?language=en-US&page=1`;
@@ -28,6 +30,14 @@ export const genreListEndPoint = (mediaType = "movie") => {
 
 export const discoverMoviesAndTvEndPoint = ({mediaType = "movie", page=1, genres="", ratingGt="", ratingLt="" }) => {
   return `${baseUrl}discover/${mediaType}?include_adult=false&include_video=false&language=en-US&page=${page}&with_genres=${genres}&vote_average.gte=${ratingGt}&vote_average.lte=${ratingLt}`;
+};
+
+export const signUpEndPoint = () => {
+  return `${authBaseUrl}auth/sign-up`;
+};
+
+export const signInEndPoint = () => {
+  return `${authBaseUrl}auth/sign-in`;
 };
 
 
