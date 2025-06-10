@@ -11,12 +11,14 @@ import {
 import PlayCircleOutlineOutlinedIcon from "@mui/icons-material/PlayCircleOutlineOutlined";
 import StarBorderRoundedIcon from "@mui/icons-material/StarBorderRounded";
 import { useLocation, useParams } from "react-router-dom";
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { getCastDetails, getMovieDetails } from "../services";
 import { formatDate, formatRuntime } from "../utils";
 import TrailerModal from "../Components/TrailerModal";
+import { AuthContext } from "../context/AuthContext";
 
 const MovieDetails = () => {
+  const { token } = useContext(AuthContext);
   const { id } = useParams();
   const location = useLocation();
   const mediaType = location.pathname.includes("/tv/") ? "tv" : "movie";
@@ -42,6 +44,8 @@ const MovieDetails = () => {
   );
 
   useEffect(() => {
+    if(!token) return ;
+
     const fetchAll = async () => {
       try {
         setLoading(true);
@@ -61,7 +65,7 @@ const MovieDetails = () => {
     };
 
     fetchAll();
-  }, []);
+  }, [token]);
 
   return (
     <Box
@@ -155,7 +159,12 @@ const MovieDetails = () => {
                   Watch Trailer
                 </Button>
               </Stack>
-              <TrailerModal onClose={handleModalClose} open={openModal} id={id} mediaType={mediaType} />
+              <TrailerModal
+                onClose={handleModalClose}
+                open={openModal}
+                id={id}
+                mediaType={mediaType}
+              />
 
               <Box my={3}>
                 <Typography variant="h6" fontWeight="bold">

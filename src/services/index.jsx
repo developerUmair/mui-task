@@ -14,24 +14,22 @@ import {
   videosEndPoint,
 } from "../EndPoints";
 
-
-
 export async function post(endPoint, data = {}) {
   try {
     const response = await axios.post(endPoint, data, {
       headers: {
-        'Content-Type': 'application/json',
+        "Content-Type": "application/json",
       },
     });
     return response.data;
   } catch (error) {
-    console.error('Error making POST request:', error);
+    console.error("Error making POST request:", error);
     throw error;
   }
 }
 
-
 export async function get(endPoint) {
+
   try {
     const response = await axios.get(endPoint, {
       headers: {
@@ -92,8 +90,8 @@ export async function getTrending({ range = "day" }) {
   return result;
 }
 
-export async function getVideos({id, mediaType = "movie"}) {
-  const result = await get(videosEndPoint({id, mediaType}));
+export async function getVideos({ id, mediaType = "movie" }) {
+  const result = await get(videosEndPoint({ id, mediaType }));
   return result;
 }
 
@@ -102,8 +100,16 @@ export async function getGenras(mediaType = "movie") {
   return result;
 }
 
-export async function getDiscoveredMoviesAndTvShows({mediaType = "movie", page = 1, genres="" , ratingGt="", ratingLt=""}) {
-  const result = await get(discoverMoviesAndTvEndPoint({mediaType, page, genres, ratingGt, ratingLt}));
+export async function getDiscoveredMoviesAndTvShows({
+  mediaType = "movie",
+  page = 1,
+  genres = "",
+  ratingGt = "",
+  ratingLt = "",
+}) {
+  const result = await get(
+    discoverMoviesAndTvEndPoint({ mediaType, page, genres, ratingGt, ratingLt })
+  );
   return result;
 }
 
@@ -115,4 +121,3 @@ export async function signIn(data) {
   const result = await post(signInEndPoint(), data);
   return result;
 }
-

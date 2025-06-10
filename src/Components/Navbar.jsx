@@ -1,4 +1,3 @@
-import * as React from "react";
 import {
   AppBar,
   Box,
@@ -12,15 +11,41 @@ import {
   ListItemText,
   useTheme,
   useMediaQuery,
+  Tooltip,
+  Avatar,
+  Menu,
+  MenuItem,
 } from "@mui/material";
 import MovieCreationIcon from "@mui/icons-material/MovieCreation";
 import MenuIcon from "@mui/icons-material/Menu";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import { useContext, useState } from "react";
+import { AccountCircle, Logout } from "@mui/icons-material";
+import { AuthContext } from "../context/AuthContext";
 
 const Navbar = () => {
+  const { logout, profile } = useContext(AuthContext);
+  const navigate = useNavigate();
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down("md"));
-  const [drawerOpen, setDrawerOpen] = React.useState(false);
+  const [drawerOpen, setDrawerOpen] = useState(false);
+  const [anchorEl, setAnchorEl] = useState(null);
+
+  const open = Boolean(anchorEl);
+
+  const handleMenuOpen = (event) => {
+    setAnchorEl(event.currentTarget);
+  };
+
+  const handleMenuClose = () => {
+    setAnchorEl(null);
+  };
+
+  const handleLogout = () => {
+    logout();
+    handleMenuClose();
+    navigate("/auth/sign-in");
+  };
 
   const toggleDrawer = (open) => () => {
     setDrawerOpen(open);
@@ -87,6 +112,10 @@ const Navbar = () => {
                 PaperProps={{
                   sx: {
                     width: 250,
+                    height: "100%",
+                    display: "flex",
+                    flexDirection: "column",
+                    justifyContent: "space-between",
                     background:
                       "linear-gradient(180deg, #0f2027, #203a43, #2c5364)",
                     color: "white",
@@ -138,6 +167,55 @@ const Navbar = () => {
                     ))}
                   </List>
                 </Box>
+                <Box sx={{ px: 2, pb: 2 }}>
+                  <Button
+                    onClick={handleMenuOpen}
+                    fullWidth
+                    variant="outlined"
+                    startIcon={
+                      <Avatar sx={{ width: 24, height: 24 }}>
+                        <AccountCircle />
+                      </Avatar>
+                    }
+                    sx={{
+                      color: "white",
+                      borderColor: "rgba(255, 255, 255, 0.5)",
+                      justifyContent: "flex-start",
+                      textTransform: "none",
+                      fontWeight: 500,
+                    }}
+                  >
+                    {profile?.name || "Profile"}
+                  </Button>
+
+                  <Menu
+                    anchorEl={anchorEl}
+                    open={open}
+                    onClose={handleMenuClose}
+                    transformOrigin={{ horizontal: "center", vertical: "top" }}
+                    anchorOrigin={{ horizontal: "center", vertical: "bottom" }}
+                    PaperProps={{ sx: { width: 200 } }}
+                  >
+                    {profile ? (
+                      <Box>
+                        <MenuItem sx={{ fontSize: "0.85rem" }}>
+                          {profile.name}
+                        </MenuItem>
+                        <MenuItem sx={{ fontSize: "0.85rem" }}>
+                          {profile.email}
+                        </MenuItem>
+                        <MenuItem
+                          onClick={handleLogout}
+                          sx={{ fontSize: "0.85rem" }}
+                        >
+                          Logout
+                        </MenuItem>
+                      </Box>
+                    ) : (
+                      <MenuItem sx={{ fontSize: "0.85rem" }}>Login</MenuItem>
+                    )}
+                  </Menu>
+                </Box>
               </Drawer>
             </>
           ) : (
@@ -163,6 +241,44 @@ const Navbar = () => {
                   <Button color="inherit">{label}</Button>
                 </Link>
               ))}
+              <Tooltip title="Open Profile">
+                <IconButton onClick={handleMenuOpen} sx={{ p: 0 }}>
+                  <Avatar>
+                    <AccountCircle />
+                  </Avatar>
+                </IconButton>
+              </Tooltip>
+              <Menu
+                anchorEl={anchorEl}
+                open={open}
+                onClose={handleMenuClose}
+                onClick={handleMenuClose}
+                transformOrigin={{ horizontal: "right", vertical: "top" }}
+                anchorOrigin={{ horizontal: "right", vertical: "bottom" }}
+                PaperProps={{
+                  sx: {
+                    width: 200,
+                  },
+                }}
+              >
+                {profile ? (
+                  <Box>
+                    <MenuItem sx={{ fontSize: "0.85rem" }}>
+                      {profile?.name}
+                    </MenuItem>
+                    <MenuItem sx={{ fontSize: "0.85rem" }}>
+                      {profile?.email}
+                    </MenuItem>
+                    <MenuItem
+                      onClick={handleLogout}
+                      sx={{ fontSize: "0.85rem" }}
+                    >
+                      <Logout sx={{ fontSize: "1.2rem", pr: 1 }} />
+                      Logout
+                    </MenuItem>
+                  </Box>
+                ) : null}
+              </Menu>
             </Box>
           )}
         </Toolbar>

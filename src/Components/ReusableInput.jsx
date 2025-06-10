@@ -10,6 +10,7 @@ const ReusableInput = ({
 }) => {
   return (
     <TextField
+      required
       size="small"
       label={label}
       name={name}
@@ -18,7 +19,23 @@ const ReusableInput = ({
       onChange={onChange}
       margin="normal"
       variant="outlined"
+      color="white"
       {...rest}
+      sx={{
+        input: { color: "white" },
+        label: { color: "white" },
+        "& .MuiOutlinedInput-root": {
+          "& fieldset": {
+            borderColor: "white",
+          },
+          "&:hover fieldset": {
+            borderColor: "white",
+          },
+          "&.Mui-focused fieldset": {
+            borderColor: "white",
+          },
+        },
+      }}
     />
   );
 };

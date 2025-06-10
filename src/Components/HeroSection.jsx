@@ -78,7 +78,7 @@ const HeroSection = ({ data }) => {
             <Box
               key={movie.id}
               sx={{
-                height: "80vh",
+                height: "90vh",
                 backgroundImage: `url(${IMAGE_BASE_URL}${
                   movie.backdrop_path || movie.poster_path
                 })`,

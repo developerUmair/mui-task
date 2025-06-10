@@ -1,17 +1,25 @@
 /* eslint-disable react-refresh/only-export-components */
-import { useEffect, useState, createContext } from "react";
+import { useEffect, useState, createContext, useContext } from "react";
 import {
   getPopular,
   getSearchResults,
   getTopRated,
   getTrending,
 } from "../services";
+import { AuthContext } from "./AuthContext";
 
 export const moviesContext = createContext();
 
 const MovieProvider = ({ children }) => {
-  const [popularCategory, setPopularCategory] = useState({ title: "Movies", value: "movie" });
-  const [topRatedCategory, setTopRatedCategory] = useState({ title: "Movies", value: "movie" });
+  const { token } = useContext(AuthContext);
+  const [popularCategory, setPopularCategory] = useState({
+    title: "Movies",
+    value: "movie",
+  });
+  const [topRatedCategory, setTopRatedCategory] = useState({
+    title: "Movies",
+    value: "movie",
+  });
   const [range, setRange] = useState({ title: "Day", value: "day" });
   const [popularMovies, setPopularMovies] = useState([]);
   const [topRatedMovies, setTopRatedMovies] = useState([]);
@@ -20,8 +28,8 @@ const MovieProvider = ({ children }) => {
   const [genras, setGenras] = useState([]);
   const [loading, setLoading] = useState(true);
 
-
   useEffect(() => {
+    if(!token) return;
     const fetchPopularCategory = async () => {
       try {
         setLoading(true);
@@ -38,9 +46,10 @@ const MovieProvider = ({ children }) => {
     };
 
     fetchPopularCategory();
-  }, [popularCategory]);
+  }, [popularCategory, token]);
 
   useEffect(() => {
+    if(!token) return;
     const fetchTopRatedCategory = async () => {
       try {
         setLoading(true);
@@ -57,10 +66,11 @@ const MovieProvider = ({ children }) => {
     };
 
     fetchTopRatedCategory();
-  }, [topRatedCategory]);
+  }, [topRatedCategory, token]);
 
-  
   useEffect(() => {
+    if(!token) return;
+
     const fetchTrending = async () => {
       try {
         setLoading(true);
@@ -74,10 +84,8 @@ const MovieProvider = ({ children }) => {
     };
 
     fetchTrending();
-  }, [range]);
+  }, [range, token]);
 
- 
-  
   const searchMovies = async (query) => {
     if (!query) return;
     setLoading(true);

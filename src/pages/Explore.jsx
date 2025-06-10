@@ -1,7 +1,6 @@
 import {
   Box,
   Chip,
-  CircularProgress,
   Container,
   FormControl,
   Grid,
@@ -18,6 +17,7 @@ import { getDiscoveredMoviesAndTvShows, getGenras } from "../services";
 import MovieCard from "../Components/MovieCard";
 import { Background } from "../utils";
 import Slider from "@mui/material/Slider";
+import Loader from "../Components/Loader";
 
 const Explore = () => {
   const location = useLocation();
@@ -110,7 +110,6 @@ const Explore = () => {
     }
   }, [mediaType, selectedGenres, rating]);
 
-  // Load genres
   useEffect(() => {
     const fetchGenrasList = async () => {
       try {
@@ -259,7 +258,7 @@ const Explore = () => {
               py: 4,
             }}
           >
-            <CircularProgress />
+            <Loader />
           </Box>
         )}
       </Container>

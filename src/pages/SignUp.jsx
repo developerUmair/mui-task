@@ -1,11 +1,13 @@
 import { Box, Button, Container, Paper, Typography } from "@mui/material";
 import ReusableInput from "../Components/ReusableInput";
-import { useState } from "react";
+import { useContext, useState } from "react";
 import { Background } from "../utils";
 import { signUp } from "../services";
 import { Link, useNavigate } from "react-router-dom";
+import { AuthContext } from "../context/AuthContext";
 
 const SignUp = () => {
+  const { login, setProfile } = useContext(AuthContext);
   const navigate = useNavigate();
   const [formData, setFormData] = useState({
     name: "",
@@ -24,8 +26,12 @@ const SignUp = () => {
     try {
       const response = await signUp(formData);
       if (response.success === true) {
-        sessionStorage.setItem("token", response.data.token);
-        navigate("/");
+        setProfile(response?.data?.user);
+        const token = response.data.token;
+        if (token) {
+          login(token);
+          navigate("/");
+        }
       }
     } catch (err) {
       console.error("Signup failed:", err);
@@ -41,6 +47,9 @@ const SignUp = () => {
             display: "flex",
             alignItems: "center",
             justifyContent: "center",
+            backgroundImage: `url(/images/auth-bg.jpg)`,
+            backgroundSize: "cover",
+            backgroundPosition: "center",
           }}
         >
           <Paper
@@ -50,21 +59,23 @@ const SignUp = () => {
               maxWidth: 500,
               p: 4,
               borderRadius: 4,
-              border: "2px solid #243B55",
-              background: "rgba(255, 255, 255, 0.95)",
+              background: "rgba(255, 255, 255, 0.1)", 
+              boxShadow: "0 8px 32px 0 rgba(31, 38, 135, 0.37)",
+              backdropFilter: "blur(5px)",
+              WebkitBackdropFilter: "blur(10px)",
             }}
           >
             <Typography
               variant="h5"
               align="center"
               gutterBottom
-              sx={{ fontWeight: "bold", color: "#243B55" }}
+              sx={{ fontWeight: "bold", color: "#fff" }}
             >
               Sign Up to Get Started!
             </Typography>
 
             <form onSubmit={handleSubmit}>
-              <Box sx={{ mb: 2 }}>
+              <Box sx={{ mb: 1 }}>
                 <ReusableInput
                   label="Name"
                   type="text"
@@ -74,7 +85,7 @@ const SignUp = () => {
                   fullWidth
                 />
               </Box>
-              <Box sx={{ mb: 2 }}>
+              <Box sx={{ mb: 1 }}>
                 <ReusableInput
                   label="Email"
                   type="email"
@@ -84,7 +95,7 @@ const SignUp = () => {
                   fullWidth
                 />
               </Box>
-              <Box sx={{ mb: 3 }}>
+              <Box sx={{ mb: 2 }}>
                 <ReusableInput
                   label="Password"
                   type="password"
@@ -112,12 +123,9 @@ const SignUp = () => {
               >
                 Create Account
               </Button>
-              <Typography variant="body2" align="center" sx={{ mt: 2 }}>
+              <Typography variant="body2" align="center" sx={{ mt: 2, color: 'white' }}>
                 Already have an account?{" "}
-                <Link
-                  to="/auth/sign-in"
-                  underline="hover"
-                >
+                <Link to="/auth/sign-in" underline="hover">
                   Sign in
                 </Link>
               </Typography>

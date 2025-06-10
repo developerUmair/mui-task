@@ -1,5 +1,4 @@
-import { Box, CircularProgress, Skeleton } from "@mui/material";
-import React from "react";
+import { Box, Skeleton } from "@mui/material";
 
 const Loader = () => {
   return (
