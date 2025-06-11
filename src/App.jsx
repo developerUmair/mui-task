@@ -15,7 +15,7 @@ import TvShows from "./pages/TvShows";
 import SignUp from "./pages/SignUp";
 import AuthLayout from "./AuthLayout";
 import ProtectedRoute from "./Components/ProtectedRoute";
-import SignIn from "./pages/Signin";
+import SignIn from "./pages/SignIn";
 
 function App() {
   const {
