@@ -1,4 +1,11 @@
-import { Box, Button, Container, Paper, Typography } from "@mui/material";
+import {
+  Box,
+  Button,
+  CircularProgress,
+  Container,
+  Paper,
+  Typography,
+} from "@mui/material";
 import ReusableInput from "../Components/ReusableInput";
 import { useContext, useState } from "react";
 import { Background } from "../utils";
@@ -14,6 +21,7 @@ const SignUp = () => {
     email: "",
     password: "",
   });
+  const [loading, setLoading] = useState(false);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -24,6 +32,7 @@ const SignUp = () => {
     e.preventDefault();
 
     try {
+      setLoading(true);
       const response = await signUp(formData);
       if (response.success === true) {
         setProfile(response?.data?.user);
@@ -35,6 +44,8 @@ const SignUp = () => {
       }
     } catch (err) {
       console.error("Signup failed:", err);
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -59,7 +70,7 @@ const SignUp = () => {
               maxWidth: 500,
               p: 4,
               borderRadius: 4,
-              background: "rgba(255, 255, 255, 0.1)", 
+              background: "rgba(255, 255, 255, 0.1)",
               boxShadow: "0 8px 32px 0 rgba(31, 38, 135, 0.37)",
               backdropFilter: "blur(5px)",
               WebkitBackdropFilter: "blur(10px)",
@@ -103,6 +114,11 @@ const SignUp = () => {
                   value={formData.password}
                   onChange={handleChange}
                   fullWidth
+                  inputProps={{
+                    pattern: "^(?=.*[A-Z])(?=.*\\d)(?=.*[!@#$%^&*]).{6,}$",
+                    title:
+                      "Password must be 6 characters long and include capital letter, number, and a special character.",
+                  }}
                 />
               </Box>
 
@@ -121,9 +137,13 @@ const SignUp = () => {
                   },
                 }}
               >
-                Create Account
+                {loading ? <CircularProgress size="30px" /> : "Create Account"}
               </Button>
-              <Typography variant="body2" align="center" sx={{ mt: 2, color: 'white' }}>
+              <Typography
+                variant="body2"
+                align="center"
+                sx={{ mt: 2, color: "white" }}
+              >
                 Already have an account?{" "}
                 <Link to="/auth/sign-in" underline="hover">
                   Sign in

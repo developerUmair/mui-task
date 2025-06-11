@@ -7,6 +7,7 @@ import "slick-carousel/slick/slick-theme.css";
 import { BrowserRouter } from "react-router-dom";
 import MovieProvider from "./context/MoviesDataContext.jsx";
 import { AuthProvider } from "./context/AuthContext.jsx";
+import { ToastContainer } from "react-toastify";
 
 createRoot(document.getElementById("root")).render(
   <StrictMode>
@@ -17,5 +18,6 @@ createRoot(document.getElementById("root")).render(
         </MovieProvider>
       </AuthProvider>
     </BrowserRouter>
+    <ToastContainer />
   </StrictMode>
 );

@@ -58,7 +58,7 @@ const MovieCard = ({ movie }) => {
             image={
               movie?.poster_path?.length > 0
                 ? `https://image.tmdb.org/t/p/w500${movie.poster_path}`
-                : "https://placehold.co/300x400"
+                : "/images/no-poster.png"
             }
             alt={movie?.original_title}
             sx={{
@@ -104,7 +104,7 @@ const MovieCard = ({ movie }) => {
                 mt: 0.5,
               }}
             >
-              <Rating
+              {movie?.vote_average > 0 ? <Rating
                 name="movie-rating"
                 value={movie?.vote_average ? movie.vote_average / 2 : 0}
                 precision={0.5}
@@ -114,7 +114,7 @@ const MovieCard = ({ movie }) => {
                   color: "#ffeb3b",
                   filter: "drop-shadow(0 0 4px rgba(255,235,59,0.8))",
                 }}
-              />
+              /> : <Typography sx={{color: 'white', fontSize: '15px'}}>No rating</Typography>}
               <Typography
                 variant="body2"
                 sx={{ color: "white", ml: 1, fontWeight: 600 }}
@@ -142,7 +142,7 @@ const MovieCard = ({ movie }) => {
                 {movie?.release_date && formatDate(movie?.release_date)}
               </Typography>
 
-              <Tooltip title="Add to Watchlist">
+              {/* <Tooltip title="Add to Watchlist">
                 <IconButton
                   color="secondary"
                   sx={{
@@ -157,7 +157,7 @@ const MovieCard = ({ movie }) => {
                 >
                   <PlaylistAddIcon />
                 </IconButton>
-              </Tooltip>
+              </Tooltip> */}
             </CardActions>
           </Box>
         </Box>

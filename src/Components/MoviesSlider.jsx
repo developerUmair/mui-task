@@ -39,7 +39,7 @@ const MoviesSlider = ({ data }) => {
     ],
   };
   return (
-    <Box sx={{ p: 2, borderRadius: 2, mb: 4, maxWidth: "90%", mx: "auto" }}>
+    <Box sx={{ p: 2, borderRadius: 2, maxWidth: "90%", mx: "auto" }}>
       <Slider {...settings}>
         {data?.length > 0 ? (
           data.map((item) => <MovieCard key={item.id} movie={item} />)

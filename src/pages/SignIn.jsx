@@ -1,10 +1,18 @@
-import { Box, Button, Container, Paper, Typography } from "@mui/material";
+import {
+  Box,
+  Button,
+  CircularProgress,
+  Container,
+  Paper,
+  Typography,
+} from "@mui/material";
 import ReusableInput from "../Components/ReusableInput";
 import { useContext, useState } from "react";
 import { Background } from "../utils";
 import { signIn } from "../services";
 import { Link, useNavigate } from "react-router-dom";
 import { AuthContext } from "../context/AuthContext";
+import { toast } from "react-toastify";
 
 const SignIn = () => {
   const { login, setProfile } = useContext(AuthContext);
@@ -14,6 +22,7 @@ const SignIn = () => {
     email: "",
     password: "",
   });
+  const [loading, setLoading] = useState(false);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -24,15 +33,19 @@ const SignIn = () => {
     e.preventDefault();
 
     try {
+      setLoading(true);
       const response = await signIn(formData);
       setProfile(response?.data?.user);
+      toast.success(response?.data?.message);
       const token = response?.data.token;
       if (token) {
         login(token);
         navigate("/");
       }
     } catch (err) {
-      console.error("Signup failed:", err);
+      toast.error(err?.response?.data.message);
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -109,7 +122,7 @@ const SignIn = () => {
                   },
                 }}
               >
-                Sign in
+                {loading ? <CircularProgress size="30px" /> : "Sign in"}
               </Button>
               <Typography
                 variant="body2"

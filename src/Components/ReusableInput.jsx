@@ -6,6 +6,7 @@ const ReusableInput = ({
   type = "text",
   value,
   onChange,
+  inputProps = {},
   ...rest
 }) => {
   return (
@@ -20,6 +21,7 @@ const ReusableInput = ({
       margin="normal"
       variant="outlined"
       color="white"
+      inputProps={inputProps}
       {...rest}
       sx={{
         input: { color: "white" },
