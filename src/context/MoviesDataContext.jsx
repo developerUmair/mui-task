@@ -20,6 +20,10 @@ const MovieProvider = ({ children }) => {
     title: "Movies",
     value: "movie",
   });
+  const [trendinCategory, setTrendingCategory] = useState({
+    title: "Movies",
+    value: "movie",
+  });
   const [range, setRange] = useState({ title: "Day", value: "day" });
   const [popularMovies, setPopularMovies] = useState([]);
   const [topRatedMovies, setTopRatedMovies] = useState([]);
@@ -74,7 +78,7 @@ const MovieProvider = ({ children }) => {
     const fetchTrending = async () => {
       try {
         setLoading(true);
-        const trendingData = await getTrending({ range: range.value });
+        const trendingData = await getTrending({ range: range.value, mediaType: trendinCategory.value});
         setTrendingMovies(trendingData.results || []);
       } catch (error) {
         console.error("Trending Fetch Error:", error);
@@ -84,7 +88,7 @@ const MovieProvider = ({ children }) => {
     };
 
     fetchTrending();
-  }, [range, token]);
+  }, [range, token, trendinCategory]);
 
   const searchMovies = async (query) => {
     if (!query) return;
@@ -113,6 +117,8 @@ const MovieProvider = ({ children }) => {
         setPopularCategory,
         topRatedCategory,
         setTopRatedCategory,
+        trendinCategory,
+        setTrendingCategory,
         range,
         setRange,
         genras,

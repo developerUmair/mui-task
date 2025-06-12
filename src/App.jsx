@@ -29,6 +29,8 @@ function App() {
     setTopRatedCategory,
     range,
     setRange,
+    trendinCategory,
+    setTrendingCategory,
   } = useContext(moviesContext);
 
   return (
@@ -85,6 +87,16 @@ function App() {
                 showToggle={true}
                 selectedOption={range}
                 setSelectedOption={setRange}
+              />
+              <SectionTitle
+                title=""
+                options={[
+                  { title: "Movies", value: "movie" },
+                  { title: "TV Shows", value: "tv" },
+                ]}
+                showToggle={true}
+                selectedOption={trendinCategory}
+                setSelectedOption={setTrendingCategory}
               />
               {loading ? <Loader /> : <MoviesSlider data={trendingMovies} />}
             </Background>

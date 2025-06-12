@@ -87,8 +87,8 @@ export async function getTopRated({ category = "movie" }) {
   const result = await get(topRatedEndPoint(category));
   return result;
 }
-export async function getTrending({ range = "day" }) {
-  const result = await get(trendingEndPoint(range));
+export async function getTrending({ range = "day", mediaType="movie" }) {
+  const result = await get(trendingEndPoint({range, mediaType}));
   return result;
 }
 

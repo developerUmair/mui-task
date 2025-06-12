@@ -14,8 +14,8 @@ export const topRatedEndPoint = (category = "movie") => {
   return `${baseUrl}${category}/top_rated?language=en-US&page=1`;
 };
 
-export const trendingEndPoint = (range = "day") => {
-  return `${baseUrl}trending/movie/${range}?language=en-US&page=1`;
+export const trendingEndPoint = ({ range = "day", mediaType = "movie" }) => {
+  return `${baseUrl}trending/${mediaType}/${range}?language=en-US&page=1`;
 };
 
 export const videosEndPoint = ({ id, mediaType }) => {
