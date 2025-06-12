@@ -10,7 +10,14 @@ import {
   Select,
   Typography,
 } from "@mui/material";
-import { useContext, useEffect, useState, useCallback, useRef, useMemo } from "react";
+import {
+  useContext,
+  useEffect,
+  useState,
+  useCallback,
+  useRef,
+  useMemo,
+} from "react";
 import { moviesContext } from "../context/MoviesDataContext";
 import { useLocation } from "react-router-dom";
 import { getDiscoveredMoviesAndTvShows, getGenras } from "../services";
@@ -28,10 +35,9 @@ const Explore = () => {
   const [page, setPage] = useState(1);
   const [discoverdData, setDiscoverdData] = useState([]);
   const [rating, setRating] = useState([0, 10]);
-  const [sliderValue, setSliderValue] = useState([0, 10]); 
+  const [sliderValue, setSliderValue] = useState([0, 10]);
   const [loading, setLoading] = useState(false);
   const [initialLoading, setInitialLoading] = useState(true);
-  
 
   const isLoadingRef = useRef(false);
   const lastRequestRef = useRef(null);
@@ -41,74 +47,74 @@ const Explore = () => {
     setSelectedGenres(typeof value === "string" ? value.split(",") : value);
   };
 
-
   const handleDelete = useCallback((genreId) => {
     setSelectedGenres((chips) => chips.filter((chip) => chip.id !== genreId));
   }, []);
-
 
   const handleSliderChange = (event, newValue) => {
     setSliderValue(newValue);
   };
 
-
   const handleRatingChangeCommitted = (event, newValue) => {
     setRating(newValue);
   };
-
 
   useEffect(() => {
     setSliderValue(rating);
   }, [rating]);
 
   const genreMenuItems = useMemo(() => {
-    return genras?.length > 0 ? genras.map((genre) => (
-      <MenuItem key={genre.id} value={genre}>
-        {genre.name}
-      </MenuItem>
-    )) : [];
+    return genras?.length > 0
+      ? genras.map((genre) => (
+          <MenuItem key={genre.id} value={genre}>
+            {genre.name}
+          </MenuItem>
+        ))
+      : [];
   }, [genras]);
 
-  const fetchDiscoverdData = useCallback(async (pageNum, isNewFilter = false) => {
-    if (isLoadingRef.current) return;
-    
-    try {
-      isLoadingRef.current = true;
-      setLoading(true);
+  const fetchDiscoverdData = useCallback(
+    async (pageNum, isNewFilter = false) => {
+      if (isLoadingRef.current) return;
 
-      // Cancel previous request if exists
-      if (lastRequestRef.current) {
-        lastRequestRef.current.abort?.();
+      try {
+        isLoadingRef.current = true;
+        setLoading(true);
+
+        // Cancel previous request if exists
+        if (lastRequestRef.current) {
+          lastRequestRef.current.abort?.();
+        }
+
+        const controller = new AbortController();
+        lastRequestRef.current = controller;
+
+        const genreIds = selectedGenres.map((g) => g.id).join(",");
+        const response = await getDiscoveredMoviesAndTvShows({
+          mediaType,
+          page: pageNum,
+          genres: genreIds || undefined,
+          ratingGt: rating[0],
+          ratingLt: rating[1],
+        });
+
+        if (isNewFilter) {
+          setDiscoverdData(response.results);
+        } else {
+          setDiscoverdData((prev) => [...prev, ...response.results]);
+        }
+      } catch (error) {
+        if (error.name !== "AbortError") {
+          console.error("Fetch Error:", error);
+        }
+      } finally {
+        isLoadingRef.current = false;
+        setLoading(false);
+        setInitialLoading(false);
       }
-
-      const controller = new AbortController();
-      lastRequestRef.current = controller;
-
-      const genreIds = selectedGenres.map((g) => g.id).join(",");
-      const response = await getDiscoveredMoviesAndTvShows({
-        mediaType,
-        page: pageNum,
-        genres: genreIds || undefined,
-        ratingGt: rating[0],
-        ratingLt: rating[1],
-      });
-
-      if (isNewFilter) {
-        setDiscoverdData(response.results);
-      } else {
-        setDiscoverdData((prev) => [...prev, ...response.results]);
-      }
-      
-    } catch (error) {
-      if (error.name !== 'AbortError') {
-        console.error("Fetch Error:", error);
-      }
-    } finally {
-      isLoadingRef.current = false;
-      setLoading(false);
-      setInitialLoading(false);
-    }
-  }, [mediaType, selectedGenres, rating]);
+    },
+    [mediaType, selectedGenres, rating]
+  );
 
   useEffect(() => {
     const fetchGenrasList = async () => {
@@ -126,35 +132,38 @@ const Explore = () => {
     fetchGenrasList();
   }, [mediaType, setGenras]);
 
-
   useEffect(() => {
     const timeoutId = setTimeout(() => {
       setPage(1);
-      fetchDiscoverdData(1, true); 
-    }, 300); 
+      fetchDiscoverdData(1, true);
+    }, 300);
 
     return () => clearTimeout(timeoutId);
   }, [selectedGenres, mediaType, rating, fetchDiscoverdData]);
 
   useEffect(() => {
     if (page > 1) {
-      fetchDiscoverdData(page, false); 
+      fetchDiscoverdData(page, false);
     }
   }, [page, fetchDiscoverdData]);
 
   useEffect(() => {
     let timeoutId;
-    
+
     const handleScroll = () => {
       if (timeoutId) clearTimeout(timeoutId);
-      
+
       timeoutId = setTimeout(() => {
-        const { scrollTop, scrollHeight, clientHeight } = document.documentElement;
-        
-        if (scrollTop + clientHeight >= scrollHeight - 100 && !isLoadingRef.current) {
+        const { scrollTop, scrollHeight, clientHeight } =
+          document.documentElement;
+
+        if (
+          scrollTop + clientHeight >= scrollHeight - 100 &&
+          !isLoadingRef.current
+        ) {
           setPage((prev) => prev + 1);
         }
-      }, 100); 
+      }, 100);
     };
 
     window.addEventListener("scroll", handleScroll, { passive: true });
@@ -248,7 +257,7 @@ const Explore = () => {
             </Grid>
           ))}
         </Grid>
-        
+
         {(loading || initialLoading) && (
           <Box
             sx={{
@@ -262,6 +271,14 @@ const Explore = () => {
           </Box>
         )}
       </Container>
+
+      {!loading && !initialLoading && discoverdData.length === 0 && (
+        <Box sx={{ textAlign: "center", py: 6 }}>
+          <Typography variant="h6" color="white">
+            No results found. Try adjusting your filters.
+          </Typography>
+        </Box>
+      )}
     </Background>
   );
 };
