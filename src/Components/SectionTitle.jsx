@@ -28,13 +28,17 @@ const SectionTitle = ({
           variant="h4"
           fontWeight="900"
           textTransform="uppercase"
-          letterSpacing={3}
+          letterSpacing={2}
           sx={{
             fontFamily: '"Bebas Neue", sans-serif',
             color: "#F5C518",
             display: "flex",
             alignItems: "center",
             gap: 1,
+            fontSize: {
+              xs: "1.5rem", 
+              md: "2.125rem", 
+            },
           }}
         >
           {title}
