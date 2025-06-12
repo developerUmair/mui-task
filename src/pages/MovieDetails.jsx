@@ -3,7 +3,6 @@ import {
   Button,
   Chip,
   CircularProgress,
-  Container,
   Divider,
   Grid,
   Stack,
@@ -13,13 +12,20 @@ import PlayCircleOutlineOutlinedIcon from "@mui/icons-material/PlayCircleOutline
 import StarBorderRoundedIcon from "@mui/icons-material/StarBorderRounded";
 import { useLocation, useParams } from "react-router-dom";
 import { useContext, useEffect, useState } from "react";
-import { getCastDetails, getMovieDetails } from "../services";
+import {
+  getCastDetails,
+  getMovieDetails,
+  getRecommendations,
+  getSimilar,
+} from "../services";
 import { Background, formatDate, formatRuntime } from "../utils";
 import TrailerModal from "../Components/TrailerModal";
 import { AuthContext } from "../context/AuthContext";
 import CastCard from "../Components/CastCard";
 import Slider from "react-slick";
 import SectionTitle from "../Components/SectionTitle";
+import Loader from "../Components/Loader";
+import MoviesSlider from "../Components/MoviesSlider";
 
 var settings = {
   infinite: false,
@@ -63,6 +69,8 @@ const MovieDetails = () => {
   const [movie, setMovie] = useState({});
   const [castDetails, setCastDetails] = useState([]);
   const [crewDetails, setCrewDetails] = useState([]);
+  const [similarMovies, setSimilarMovies] = useState([]);
+  const [recommendations, setRecommendations] = useState([]);
   const [loading, setLoading] = useState(true);
   const [openModal, setOpenModal] = useState(false);
 
@@ -86,17 +94,23 @@ const MovieDetails = () => {
     const fetchAll = async () => {
       try {
         setLoading(true);
-        const [movieDetailsData, castDetailsData, castAndCrewDetails] =
-          await Promise.allSettled([
-            getMovieDetails({ id, category: mediaType }),
-            getCastDetails(id),
-          ]);
-
-        console.log("castAndCrewDetails", castAndCrewDetails);
+        const [
+          movieDetailsData,
+          castDetailsData,
+          getSimilarMovies,
+          getRecommendedMovies,
+        ] = await Promise.allSettled([
+          getMovieDetails({ id, category: mediaType }),
+          getCastDetails({id, mediaType}),
+          getSimilar({ id, mediaType }),
+          getRecommendations({ id, mediaType }),
+        ]);
 
         setMovie(movieDetailsData?.value);
         setCastDetails(castDetailsData?.value?.cast);
         setCrewDetails(castDetailsData?.value?.crew);
+        setSimilarMovies(getSimilarMovies?.value?.results);
+        setRecommendations(getRecommendedMovies?.value?.results);
       } catch (error) {
         console.error("Error fetching movies:", error);
       } finally {
@@ -290,7 +304,7 @@ const MovieDetails = () => {
         )}
       </Box>
       <Background>
-        <Container
+        <Box
           maxWidth="xl"
           disableGutters
           sx={{
@@ -308,7 +322,33 @@ const MovieDetails = () => {
                 ))
               : null}
           </Slider>
-        </Container>
+        </Box>
+        <Box
+          maxWidth="xl"
+          disableGutters
+          sx={{
+            pt: 6,
+            borderRadius: 2,
+            maxWidth: "100%",
+            mx: "auto",
+          }}
+        >
+          <SectionTitle title={`Similar ${mediaType === "tv" ? "TV Shows": "Movies"}`} />
+          {loading ? <Loader /> : <MoviesSlider data={similarMovies} />}
+        </Box>
+        <Box
+          maxWidth="xl"
+          disableGutters
+          sx={{
+            pt: 6,
+            borderRadius: 2,
+            maxWidth: "100%",
+            mx: "auto",
+          }}
+        >
+          <SectionTitle title="Recommendations" />
+          {loading ? <Loader /> : <MoviesSlider data={recommendations} />}
+        </Box>
       </Background>
     </>
   );

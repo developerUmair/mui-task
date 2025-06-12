@@ -5,8 +5,10 @@ import {
   genreListEndPoint,
   PopularEndPoint,
   popularMoviesEndPoint,
+  recommendationsEndPoint,
   signInEndPoint,
   signUpEndPoint,
+  similarMoviesEndPoint,
   topRatedEndPoint,
   topRatedMoviesEndPoint,
   trendingEndPoint,
@@ -71,8 +73,8 @@ export async function getMovieDetails({ id, category = "movie" }) {
   return result;
 }
 
-export async function getCastDetails(id) {
-  const result = await get(`${baseUrl}movie/${id}/credits`);
+export async function getCastDetails({id, mediaType="movie"}) {
+  const result = await get(`${baseUrl}${mediaType}/${id}/credits`);
   return result;
 }
 
@@ -119,5 +121,16 @@ export async function signUp(data) {
 }
 export async function signIn(data) {
   const result = await post(signInEndPoint(), data);
+  return result;
+}
+
+
+export async function getSimilar({ id, mediaType = "movie" }) {
+  const result = await get(similarMoviesEndPoint({ id, mediaType }));
+  return result;
+}
+
+export async function getRecommendations({ id, mediaType = "movie" }) {
+  const result = await get(recommendationsEndPoint({ id, mediaType }));
   return result;
 }
