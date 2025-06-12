@@ -41,3 +41,8 @@ export const signInEndPoint = () => {
 };
 
 
+
+export const castAndCrewEndPoint = (movieId) => {
+  return `https://api.themoviedb.org/3/movie/${movieId}/credits`;
+};
+

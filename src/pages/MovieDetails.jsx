@@ -3,6 +3,7 @@ import {
   Button,
   Chip,
   CircularProgress,
+  Container,
   Divider,
   Grid,
   Stack,
@@ -13,9 +14,45 @@ import StarBorderRoundedIcon from "@mui/icons-material/StarBorderRounded";
 import { useLocation, useParams } from "react-router-dom";
 import { useContext, useEffect, useState } from "react";
 import { getCastDetails, getMovieDetails } from "../services";
-import { formatDate, formatRuntime } from "../utils";
+import { Background, formatDate, formatRuntime } from "../utils";
 import TrailerModal from "../Components/TrailerModal";
 import { AuthContext } from "../context/AuthContext";
+import CastCard from "../Components/CastCard";
+import Slider from "react-slick";
+import SectionTitle from "../Components/SectionTitle";
+
+var settings = {
+  infinite: false,
+  speed: 500,
+  slidesToShow: 4,
+  slidesToScroll: 4,
+  initialSlide: 0,
+  responsive: [
+    {
+      breakpoint: 1024,
+      settings: {
+        slidesToShow: 3,
+        slidesToScroll: 3,
+        infinite: true,
+      },
+    },
+    {
+      breakpoint: 600,
+      settings: {
+        slidesToShow: 2,
+        slidesToScroll: 2,
+        initialSlide: 2,
+      },
+    },
+    {
+      breakpoint: 480,
+      settings: {
+        slidesToShow: 1,
+        slidesToScroll: 1,
+      },
+    },
+  ],
+};
 
 const MovieDetails = () => {
   const { token } = useContext(AuthContext);
@@ -44,15 +81,18 @@ const MovieDetails = () => {
   );
 
   useEffect(() => {
-    if(!token) return ;
+    if (!token) return;
 
     const fetchAll = async () => {
       try {
         setLoading(true);
-        const [movieDetailsData, castDetailsData] = await Promise.allSettled([
-          getMovieDetails({ id, category: mediaType }),
-          getCastDetails(id),
-        ]);
+        const [movieDetailsData, castDetailsData, castAndCrewDetails] =
+          await Promise.allSettled([
+            getMovieDetails({ id, category: mediaType }),
+            getCastDetails(id),
+          ]);
+
+        console.log("castAndCrewDetails", castAndCrewDetails);
 
         setMovie(movieDetailsData?.value);
         setCastDetails(castDetailsData?.value?.cast);
@@ -68,11 +108,12 @@ const MovieDetails = () => {
   }, [token]);
 
   return (
-    <Box
-      sx={{
-        position: "relative",
-        width: "100%",
-        backgroundImage: `
+    <>
+      <Box
+        sx={{
+          position: "relative",
+          width: "100%",
+          backgroundImage: `
           linear-gradient(
             to bottom,
             rgba(44, 83, 100, 0.7) 0%,
@@ -80,170 +121,196 @@ const MovieDetails = () => {
             rgba(15, 32, 39, 0.8) 100%
           ),
           url('https://image.tmdb.org/t/p/w1280${movie?.backdrop_path}')`,
-        backgroundSize: "cover",
-        backgroundPosition: "center",
-        color: "#fff",
-        display: "flex",
-        alignItems: "center",
-        justifyContent: "center",
-      }}
-    >
-      {loading ? (
-        <Box
-          sx={{
-            height: "80vh",
-            display: "flex",
-            justifyContent: "center",
-            alignItems: "center",
-          }}
-        >
-          <CircularProgress sx={{ color: "#fff", fontSize: "4rem" }} />
-        </Box>
-      ) : (
-        <Box
-          sx={{
-            color: "#fff",
-            p: { xs: 2, md: 2 },
-            minHeight: "100vh",
-            display: "flex",
-            alignItems: "center",
-          }}
-        >
-          <Grid container spacing={4} alignItems="center">
-            <Grid item xs={12} md={5} lg={4}>
-              <Box
-                component="img"
-                src={`https://image.tmdb.org/t/p/w500${movie?.poster_path}`}
-                alt="Movie Poster"
-                sx={{
-                  width: "100%",
-                  maxWidth: 300,
-                  borderRadius: 2,
-                  boxShadow: 3,
-                  mx: { xs: "auto", md: 0 },
-                  display: "block",
-                }}
-              />
-            </Grid>
+          backgroundSize: "cover",
+          backgroundPosition: "center",
+          color: "#fff",
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "center",
+        }}
+      >
+        {loading ? (
+          <Box
+            sx={{
+              height: "80vh",
+              display: "flex",
+              justifyContent: "center",
+              alignItems: "center",
+            }}
+          >
+            <CircularProgress sx={{ color: "#fff", fontSize: "4rem" }} />
+          </Box>
+        ) : (
+          <Box
+            sx={{
+              color: "#fff",
+              p: { xs: 2, md: 2 },
+              minHeight: "100vh",
+              display: "flex",
+              alignItems: "center",
+            }}
+          >
+            <Grid container spacing={4} alignItems="center">
+              <Grid item xs={12} md={5} lg={4}>
+                <Box
+                  component="img"
+                  src={`https://image.tmdb.org/t/p/w500${movie?.poster_path}`}
+                  alt="Movie Poster"
+                  sx={{
+                    width: "100%",
+                    maxWidth: 300,
+                    borderRadius: 2,
+                    boxShadow: 3,
+                    mx: { xs: "auto", md: 0 },
+                    display: "block",
+                  }}
+                />
+              </Grid>
 
-            <Grid item xs={12} md={7} lg={8}>
-              <Typography variant="h4" fontWeight="bold">
-                {movie?.title || movie?.name}
-              </Typography>
+              <Grid item xs={12} md={7} lg={8}>
+                <Typography variant="h4" fontWeight="bold">
+                  {movie?.title || movie?.name}
+                </Typography>
 
-              <Typography variant="subtitle1" fontStyle="italic" color="gray">
-                {movie?.tagline}
-              </Typography>
-
-              <Stack direction="row" spacing={1} my={2}>
-                {movie?.genres?.length > 0 &&
-                  movie?.genres.map((genre) => (
-                    <Chip
-                      key={genre?.name}
-                      label={genre?.name}
-                      size="small"
-                      color="secondary"
-                    />
-                  ))}
-              </Stack>
-
-              <Stack direction="row" spacing={3} alignItems="center" my={2}>
-                <StarBorderRoundedIcon fontSize="large" />
-                <Typography variant="h6">{movie?.vote_average}</Typography>
-                <Button
-                  startIcon={<PlayCircleOutlineOutlinedIcon />}
-                  variant="outlined"
-                  sx={{ color: "#fff", borderColor: "#fff" }}
-                  onClick={handleModalOpen}
+                <Typography variant="subtitle1" fontStyle="italic" color="gray">
+                  {movie?.tagline}
+                </Typography>
+                <Stack
+                  direction={{ sx: "column", md: "row" }}
+                  spacing={1}
+                  my={2}
                 >
-                  Watch Trailer
-                </Button>
-              </Stack>
-              <TrailerModal
-                onClose={handleModalClose}
-                open={openModal}
-                id={id}
-                mediaType={mediaType}
-              />
+                  {movie?.genres?.length > 0 &&
+                    movie?.genres.map((genre) => (
+                      <Chip
+                        key={genre?.name}
+                        label={genre?.name}
+                        size="small"
+                        color="secondary"
+                        sx={{ mb: 1 }}
+                      />
+                    ))}
+                </Stack>
 
-              <Box my={3}>
-                <Typography variant="h6" fontWeight="bold">
-                  Overview
-                </Typography>
-                <Typography variant="body1" color="grey.300" maxWidth={800}>
-                  {movie?.overview}
-                </Typography>
-              </Box>
+                <Stack direction="row" spacing={3} alignItems="center" my={2}>
+                  <StarBorderRoundedIcon fontSize="large" />
+                  <Typography variant="h6">{movie?.vote_average}</Typography>
+                  <Button
+                    startIcon={<PlayCircleOutlineOutlinedIcon />}
+                    variant="outlined"
+                    sx={{ color: "#fff", borderColor: "#fff" }}
+                    onClick={handleModalOpen}
+                  >
+                    Watch Trailer
+                  </Button>
+                </Stack>
+                <TrailerModal
+                  onClose={handleModalClose}
+                  open={openModal}
+                  id={id}
+                  mediaType={mediaType}
+                />
 
-              <Divider sx={{ borderColor: "#555", my: 2 }} />
-              <Stack direction={{ xs: "column", sm: "row" }} spacing={2}>
-                <Typography>
-                  <strong>Status:</strong> {movie?.status || "N/A"}
-                </Typography>
+                <Box my={3}>
+                  <Typography variant="h6" fontWeight="bold">
+                    Overview
+                  </Typography>
+                  <Typography variant="body1" color="grey.300" maxWidth={800}>
+                    {movie?.overview}
+                  </Typography>
+                </Box>
 
-                {movie?.release_date && (
+                <Divider sx={{ borderColor: "#555", my: 2 }} />
+                <Stack direction={{ xs: "column", sm: "row" }} spacing={2}>
                   <Typography>
-                    <strong>Release Date:</strong>{" "}
-                    {formatDate(movie?.release_date) || "N/A"}
+                    <strong>Status:</strong> {movie?.status || "N/A"}
                   </Typography>
-                )}
-                {movie?.runtime && (
-                  <Typography>
-                    <strong>Runtime:</strong>{" "}
-                    {formatRuntime(movie?.runtime) || "N/A"}
-                  </Typography>
-                )}
-              </Stack>
 
-              {directors?.length > 0 && (
-                <>
-                  {" "}
-                  <Divider sx={{ borderColor: "#555", my: 2 }} />
-                  <Typography mt={2}>
-                    <strong>Director:</strong>{" "}
-                    {directors?.length > 0
-                      ? [
-                          ...new Set(
-                            directors.map((director) => director?.name)
-                          ),
-                        ].join(", ")
-                      : "N/A"}
-                  </Typography>{" "}
-                </>
-              )}
-              {writers?.length > 0 && (
-                <>
-                  <Divider sx={{ borderColor: "#555", my: 2 }} />
-                  <Typography mt={2}>
-                    <strong>Writer:</strong>{" "}
-                    {writers?.length > 0
-                      ? [
-                          ...new Set(writers.map((writer) => writer?.name)),
-                        ].join(", ")
-                      : "N/A"}
-                  </Typography>
-                </>
-              )}
-              {movie?.created_by?.length > 0 && (
-                <>
-                  <Divider sx={{ borderColor: "#555", my: 2 }} />
-                  <Typography mt={2}>
-                    <strong>Created:</strong>{" "}
-                    {movie?.created_by?.length > 0
-                      ? [
-                          ...new Set(
-                            movie?.created_by?.map((creator) => creator?.name)
-                          ),
-                        ].join(", ")
-                      : "N/A"}
-                  </Typography>
-                </>
-              )}
+                  {movie?.release_date && (
+                    <Typography>
+                      <strong>Release Date:</strong>{" "}
+                      {formatDate(movie?.release_date) || "N/A"}
+                    </Typography>
+                  )}
+                  {movie?.runtime && (
+                    <Typography>
+                      <strong>Runtime:</strong>{" "}
+                      {formatRuntime(movie?.runtime) || "N/A"}
+                    </Typography>
+                  )}
+                </Stack>
+
+                {directors?.length > 0 && (
+                  <>
+                    {" "}
+                    <Divider sx={{ borderColor: "#555", my: 2 }} />
+                    <Typography mt={2}>
+                      <strong>Director:</strong>{" "}
+                      {directors?.length > 0
+                        ? [
+                            ...new Set(
+                              directors.map((director) => director?.name)
+                            ),
+                          ].join(", ")
+                        : "N/A"}
+                    </Typography>{" "}
+                  </>
+                )}
+                {writers?.length > 0 && (
+                  <>
+                    <Divider sx={{ borderColor: "#555", my: 2 }} />
+                    <Typography mt={2}>
+                      <strong>Writer:</strong>{" "}
+                      {writers?.length > 0
+                        ? [
+                            ...new Set(writers.map((writer) => writer?.name)),
+                          ].join(", ")
+                        : "N/A"}
+                    </Typography>
+                  </>
+                )}
+                {movie?.created_by?.length > 0 && (
+                  <>
+                    <Divider sx={{ borderColor: "#555", my: 2 }} />
+                    <Typography mt={2}>
+                      <strong>Created:</strong>{" "}
+                      {movie?.created_by?.length > 0
+                        ? [
+                            ...new Set(
+                              movie?.created_by?.map((creator) => creator?.name)
+                            ),
+                          ].join(", ")
+                        : "N/A"}
+                    </Typography>
+                  </>
+                )}
+              </Grid>
             </Grid>
-          </Grid>
-        </Box>
-      )}
-    </Box>
+          </Box>
+        )}
+      </Box>
+      <Background>
+        <Container
+          maxWidth="xl"
+          disableGutters
+          sx={{
+            pt: 6,
+            borderRadius: 2,
+            maxWidth: "90%",
+            mx: "auto",
+          }}
+        >
+          <SectionTitle title="Top Cast" />
+          <Slider {...settings}>
+            {castDetails?.length > 0
+              ? castDetails.map((cast) => (
+                  <CastCard key={cast?.id} cast={cast} />
+                ))
+              : null}
+          </Slider>
+        </Container>
+      </Background>
+    </>
   );
 };
 
