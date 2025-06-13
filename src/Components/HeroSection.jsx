@@ -6,6 +6,7 @@ import {
   Container,
   TextField,
   InputAdornment,
+  Grid,
 } from "@mui/material";
 import SearchIcon from "@mui/icons-material/Search";
 import { keyframes } from "@emotion/react";
@@ -15,6 +16,7 @@ import SectionTitle from "./SectionTitle";
 import MoviesSlider from "./MoviesSlider";
 import { moviesContext } from "../context/MoviesDataContext";
 import ClearRoundedIcon from "@mui/icons-material/ClearRounded";
+import MovieCard from "./MovieCard";
 
 const fadeIn = keyframes`
   from {
@@ -170,18 +172,32 @@ const HeroSection = ({ data }) => {
       {search.trim() !== "" && (
         <Background>
           <SectionTitle title="Search Results" />
-          {loading ? (
-            <Loader />
-          ) : searchResults.length > 0 ? (
-            <MoviesSlider data={searchResults} />
-          ) : (
-            <Typography
-              variant="h6"
-              sx={{ textAlign: "center", mt: 4, color: "#ccc" }}
-            >
-              No results found for "{search}"
-            </Typography>
-          )}
+
+          <Grid
+            container
+            spacing={2}
+            mt={2}
+            display="flex"
+            justifyContent="center"
+            alignItems="center"
+          >
+            {loading ? (
+              <Loader />
+            ) : searchResults.length > 0 ? (
+              searchResults?.map((movie, index) => (
+                <Grid item key={`${movie.id}-${index}`} xs={12} md={6} lg={4}>
+                  <MovieCard movie={movie} />
+                </Grid>
+              ))
+            ) : (
+              <Typography
+                variant="h6"
+                sx={{ textAlign: "center", mt: 4, color: "#ccc" }}
+              >
+                No results found for "{search}"
+              </Typography>
+            )}
+          </Grid>
         </Background>
       )}
     </>
