@@ -61,9 +61,9 @@ export async function getUpComingMovies() {
   return result;
 }
 
-export async function getSearchResults({ query }) {
+export async function getSearchResults({ query, page = 1 }) {
   const result = await get(
-    `${baseUrl}/search/multi?query=${query}&include_adult=false&language=en-US&page=1`
+    `${baseUrl}/search/multi?query=${query}&include_adult=false&language=en-US&page=${page}`
   );
   return result;
 }

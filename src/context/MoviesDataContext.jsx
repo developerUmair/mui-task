@@ -29,11 +29,14 @@ const MovieProvider = ({ children }) => {
   const [topRatedMovies, setTopRatedMovies] = useState([]);
   const [trendingMovies, setTrendingMovies] = useState([]);
   const [searchResults, setSearchResults] = useState([]);
+  const [searchPage, setSearchPage] = useState(1);
+  const [hasMoreSearchResults, setHasMoreSearchResults] = useState(false);
+  const [isSearching, setIsSearching] = useState(false);
   const [genras, setGenras] = useState([]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    if(!token) return;
+    if (!token) return;
     const fetchPopularCategory = async () => {
       try {
         setLoading(true);
@@ -53,7 +56,7 @@ const MovieProvider = ({ children }) => {
   }, [popularCategory, token]);
 
   useEffect(() => {
-    if(!token) return;
+    if (!token) return;
     const fetchTopRatedCategory = async () => {
       try {
         setLoading(true);
@@ -73,12 +76,15 @@ const MovieProvider = ({ children }) => {
   }, [topRatedCategory, token]);
 
   useEffect(() => {
-    if(!token) return;
+    if (!token) return;
 
     const fetchTrending = async () => {
       try {
         setLoading(true);
-        const trendingData = await getTrending({ range: range.value, mediaType: trendinCategory.value});
+        const trendingData = await getTrending({
+          range: range.value,
+          mediaType: trendinCategory.value,
+        });
         setTrendingMovies(trendingData.results || []);
       } catch (error) {
         console.error("Trending Fetch Error:", error);
@@ -90,15 +96,28 @@ const MovieProvider = ({ children }) => {
     fetchTrending();
   }, [range, token, trendinCategory]);
 
-  const searchMovies = async (query) => {
-    if (!query) return;
+  const searchMovies = async (query, page = 1, append = false) => {
+    if (!query || isSearching) return;
+
+    setIsSearching(true);
     setLoading(true);
+
     try {
-      const data = await getSearchResults({ query });
-      setSearchResults(data.results);
+      const data = await getSearchResults({ query, page });
+
+      if (append) {
+        setSearchResults((prev) => [...prev, ...data.results]);
+      } else {
+        setSearchResults(data.results);
+      }
+
+      setHasMoreSearchResults(data.page < data.total_pages);
+      setSearchPage(data.page);
     } catch (error) {
-      console.error("Search Failed:", error);
+      console.error("Search error:", error);
+      setHasMoreSearchResults(false);
     } finally {
+      setIsSearching(false);
       setLoading(false);
     }
   };
@@ -123,6 +142,10 @@ const MovieProvider = ({ children }) => {
         setRange,
         genras,
         setGenras,
+        searchPage,
+        setSearchPage,
+        hasMoreSearchResults,
+        isSearching,
       }}
     >
       {children}

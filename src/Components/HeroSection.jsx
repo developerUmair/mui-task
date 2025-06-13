@@ -33,18 +33,46 @@ const IMAGE_BASE_URL = "https://image.tmdb.org/t/p/w1280";
 
 const HeroSection = ({ data }) => {
   const [search, setSearch] = useState("");
-  const { searchMovies, searchResults, loading } = useContext(moviesContext);
+  const {
+    searchMovies,
+    searchResults,
+    loading,
+    searchPage,
+    hasMoreSearchResults,
+    isSearching,
+  } = useContext(moviesContext);
 
   useEffect(() => {
     if (search.trim() === "") return;
 
     const timer = setTimeout(() => {
-      searchMovies(search);
-    }, 1000);
-    return () => {
-      clearTimeout(timer);
-    };
+      searchMovies(search, 1, false);
+    }, 500);
+
+    return () => clearTimeout(timer);
   }, [search]);
+
+  useEffect(() => {
+    const handleScroll = () => {
+      const { scrollTop, scrollHeight, clientHeight } =
+        document.documentElement;
+      const isBottom = scrollTop + clientHeight >= scrollHeight - 100;
+
+      if (
+        isBottom &&
+        !loading &&
+        !isSearching &&
+        hasMoreSearchResults &&
+        search.trim() !== ""
+      ) {
+        const nextPage = searchPage + 1;
+        searchMovies(search, nextPage, true); // append next page
+      }
+    };
+
+    window.addEventListener("scroll", handleScroll, { passive: true });
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, [search, searchPage, loading, isSearching, hasMoreSearchResults]);
 
   const handleSearchChange = (event) => {
     setSearch(event.target.value);
@@ -171,7 +199,7 @@ const HeroSection = ({ data }) => {
       {/* Search Results Section */}
       {search.trim() !== "" && (
         <Background>
-          <SectionTitle title="Search Results" />
+          <SectionTitle title={`Search Results for ${search}`} />
 
           <Grid
             container
@@ -181,22 +209,32 @@ const HeroSection = ({ data }) => {
             justifyContent="center"
             alignItems="center"
           >
-            {loading ? (
-              <Loader />
-            ) : searchResults.length > 0 ? (
-              searchResults?.map((movie, index) => (
-                <Grid item key={`${movie.id}-${index}`} xs={12} md={6} lg={4}>
-                  <MovieCard movie={movie} />
+              {searchResults.length > 0 ? (
+                searchResults.map((movie, index) => (
+                  <Grid item key={`${movie.id}-${index}`} xs={12} md={6} lg={4}>
+                    <MovieCard movie={movie} />
+                  </Grid>
+                ))
+              ) : !loading ? (
+                <Grid item xs={12}>
+                  <Typography
+                    variant="h6"
+                    sx={{ textAlign: "center", mt: 4, color: "#ccc" }}
+                  >
+                    No results found for "{search}"
+                  </Typography>
                 </Grid>
-              ))
-            ) : (
-              <Typography
-                variant="h6"
-                sx={{ textAlign: "center", mt: 4, color: "#ccc" }}
-              >
-                No results found for "{search}"
-              </Typography>
-            )}
+              ) : null}
+
+              {loading && (
+                <Grid item xs={12}>
+                  <Box
+                    sx={{ display: "flex", justifyContent: "center", py: 4 }}
+                  >
+                    <Loader />
+                  </Box>
+                </Grid>
+              )}
           </Grid>
         </Background>
       )}
