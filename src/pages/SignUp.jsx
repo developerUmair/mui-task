@@ -12,6 +12,7 @@ import { Background } from "../utils";
 import { signUp } from "../services";
 import { Link, useNavigate } from "react-router-dom";
 import { AuthContext } from "../context/AuthContext";
+import { toast } from "react-toastify";
 
 const SignUp = () => {
   const { login, setProfile } = useContext(AuthContext);
@@ -35,6 +36,7 @@ const SignUp = () => {
     try {
       setLoading(true);
       const response = await signUp(formData);
+      console.log("RES++", response);
       if (response.success === true) {
         setProfile(response?.data?.user);
         const token = response.data.token;
@@ -44,7 +46,7 @@ const SignUp = () => {
         }
       }
     } catch (err) {
-      console.error("Signup failed:", err);
+      toast.error(err?.response?.data.message);
     } finally {
       setLoading(false);
     }
