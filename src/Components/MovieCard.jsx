@@ -8,6 +8,7 @@ import {
   Tooltip,
   Button,
   Rating,
+  CircularProgress,
 } from "@mui/material";
 import PlaylistAddIcon from "@mui/icons-material/PlaylistAdd";
 import { useNavigate } from "react-router-dom";
@@ -104,23 +105,31 @@ const MovieCard = ({ movie }) => {
                 mt: 0.5,
               }}
             >
-              {movie?.vote_average > 0 ? <Rating
-                name="movie-rating"
-                value={movie?.vote_average ? movie.vote_average / 2 : 0}
-                precision={0.5}
-                readOnly
-                size="small"
-                sx={{
-                  color: "#ffeb3b",
-                  filter: "drop-shadow(0 0 4px rgba(255,235,59,0.8))",
-                }}
-              /> : <Typography sx={{color: 'white', fontSize: '15px'}}>No rating</Typography>}
-              <Typography
-                variant="body2"
-                sx={{ color: "white", ml: 1, fontWeight: 600 }}
-              >
-                {(movie?.vote_average / 2)?.toFixed(1) ?? "N/A"}
-              </Typography>
+               <Box position="relative" display="inline-flex">
+                <CircularProgress
+                  variant="determinate"
+                  value={(movie.vote_average || 0) * 10}
+                  size={50}
+                  thickness={4}
+                  sx={{
+                    color: "#F5C518",
+                  }}
+                />
+                <Box
+                  top={0}
+                  left={0}
+                  bottom={0}
+                  right={0}
+                  position="absolute"
+                  display="flex"
+                  alignItems="center"
+                  justifyContent="center"
+                >
+                  <Typography variant="caption" component="div" color="white">
+                    {movie.vote_average?.toFixed(1) ?? "N/A"}
+                  </Typography>
+                </Box>
+              </Box>
             </Box>
 
             <CardActions

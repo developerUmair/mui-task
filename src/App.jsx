@@ -16,6 +16,7 @@ import SignUp from "./pages/SignUp";
 import AuthLayout from "./AuthLayout";
 import ProtectedRoute from "./Components/ProtectedRoute";
 import SignIn from "./pages/SignIn";
+import Profile from "./pages/Profile";
 
 function App() {
   const {
@@ -35,8 +36,15 @@ function App() {
 
   return (
     <Routes>
-      <Route element={<ProtectedRoute><Layout /></ProtectedRoute>}>
+      <Route
+        element={
+          <ProtectedRoute>
+            <Layout />
+          </ProtectedRoute>
+        }
+      >
         <Route path="/" element={<HeroSection data={popularMovies} />} />
+        <Route path="/profile" element={<Profile />} />
         <Route
           path="/popular"
           element={

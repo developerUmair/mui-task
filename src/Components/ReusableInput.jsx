@@ -16,6 +16,7 @@ const ReusableInput = ({
   const handleShowPassword = () => {
     setShowPassword((prev) => !prev);
   };
+
   return (
     <TextField
       required
@@ -27,7 +28,7 @@ const ReusableInput = ({
       onChange={onChange}
       margin="normal"
       variant="outlined"
-      color="white"
+      autoComplete="off"
       inputProps={inputProps}
       InputProps={{
         endAdornment: showToggle ? (
@@ -45,9 +46,18 @@ const ReusableInput = ({
       }}
       {...rest}
       sx={{
-        input: { color: "white" },
-        label: { color: "white" },
+        input: {
+          color: "white",
+        },
+        label: {
+          color: "white",
+          fontWeight: 500,
+        },
+        "& label.Mui-focused": {
+          color: "white",
+        },
         "& .MuiOutlinedInput-root": {
+          backgroundColor: "transparent",
           "& fieldset": {
             borderColor: "white",
           },

@@ -36,7 +36,6 @@ const SignUp = () => {
     try {
       setLoading(true);
       const response = await signUp(formData);
-      console.log("RES++", response);
       if (response.success === true) {
         setProfile(response?.data?.user);
         const token = response.data.token;
@@ -107,6 +106,11 @@ const SignUp = () => {
                   value={formData.email}
                   onChange={handleChange}
                   fullWidth
+                  inputProps={{
+                    pattern: "^[a-zA-Z0-9._%+-]+@gmail\\.com$",
+                    title:
+                      "Only valid Gmail addresses are allowed (e.g., example@gmail.com)",
+                  }}
                 />
               </Box>
               <Box sx={{ mb: 2 }}>
@@ -152,7 +156,7 @@ const SignUp = () => {
               >
                 Already have an account?{" "}
                 <Link to="/auth/sign-in" underline="hover">
-                  Sign in
+                  Sign In
                 </Link>
               </Typography>
             </form>
