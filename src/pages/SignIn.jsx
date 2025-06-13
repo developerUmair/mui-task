@@ -22,6 +22,7 @@ const SignIn = () => {
     email: "",
     password: "",
   });
+  const [showPassword, setShowPassword] = useState(false);
   const [loading, setLoading] = useState(false);
 
   const handleChange = (e) => {
@@ -99,11 +100,14 @@ const SignIn = () => {
               <Box sx={{ mb: 2 }}>
                 <ReusableInput
                   label="Password"
-                  type="password"
+                  type={showPassword ? "text" : "password"}
                   name="password"
                   value={formData.password}
                   onChange={handleChange}
                   fullWidth
+                  showToggle={true}
+                  showPassword={showPassword}
+                  setShowPassword={setShowPassword}
                 />
               </Box>
 
