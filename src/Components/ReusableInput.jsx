@@ -28,6 +28,7 @@ const ReusableInput = ({
       margin="normal"
       variant="outlined"
       color="white"
+      inputProps={inputProps}
       InputProps={{
         endAdornment: showToggle ? (
           <InputAdornment position="end">
