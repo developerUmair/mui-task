@@ -101,7 +101,7 @@ const MovieDetails = () => {
           getRecommendedMovies,
         ] = await Promise.allSettled([
           getMovieDetails({ id, category: mediaType }),
-          getCastDetails({id, mediaType}),
+          getCastDetails({ id, mediaType }),
           getSimilar({ id, mediaType }),
           getRecommendations({ id, mediaType }),
         ]);
@@ -121,11 +121,9 @@ const MovieDetails = () => {
     fetchAll();
   }, [token, id]);
 
-
   useEffect(() => {
-  window.scrollTo({ top: 0, behavior: "smooth" });
-}, [id]);
-
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  }, [id]);
 
   return (
     <>
@@ -171,7 +169,7 @@ const MovieDetails = () => {
             }}
           >
             <Grid container spacing={4} alignItems="center">
-              <Grid item xs={12} md={5} lg={4}>
+              <Grid item size={{ xs: 12, md: 5, lg: 4 }}>
                 <Box
                   component="img"
                   src={`https://image.tmdb.org/t/p/w500${movie?.poster_path}`}
@@ -187,7 +185,7 @@ const MovieDetails = () => {
                 />
               </Grid>
 
-              <Grid item xs={12} md={7} lg={8}>
+              <Grid item size={{ xs: 12, md: 7, lg: 8 }}>
                 <Typography variant="h4" fontWeight="bold">
                   {movie?.title || movie?.name}
                 </Typography>
@@ -339,7 +337,9 @@ const MovieDetails = () => {
             mx: "auto",
           }}
         >
-          <SectionTitle title={`Similar ${mediaType === "tv" ? "TV Shows": "Movies"}`} />
+          <SectionTitle
+            title={`Similar ${mediaType === "tv" ? "TV Shows" : "Movies"}`}
+          />
           {loading ? <Loader /> : <MoviesSlider data={similarMovies} />}
         </Box>
         <Box
