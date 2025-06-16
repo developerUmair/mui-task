@@ -108,9 +108,12 @@ export async function getDiscoveredMoviesAndTvShows({
   genres = "",
   ratingGt = "",
   ratingLt = "",
+  releaseDateGte,
+  releaseDateLte,
+  sortBy
 }) {
   const result = await get(
-    discoverMoviesAndTvEndPoint({ mediaType, page, genres, ratingGt, ratingLt })
+    discoverMoviesAndTvEndPoint({ mediaType, page, genres, ratingGt, ratingLt, releaseDateGte, releaseDateLte, sortBy })
   );
   return result;
 }

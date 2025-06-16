@@ -32,8 +32,11 @@ export const discoverMoviesAndTvEndPoint = ({
   genres = "",
   ratingGt = "",
   ratingLt = "",
+  releaseDateGte = "",
+  releaseDateLte = "",
+  sortBy = "",
 }) => {
-  return `${baseUrl}discover/${mediaType}?include_adult=false&include_video=false&language=en-US&page=${page}&with_genres=${genres}&vote_average.gte=${ratingGt}&vote_average.lte=${ratingLt}`;
+  return `${baseUrl}discover/${mediaType}?include_adult=false&include_video=false&language=en-US&page=${page}&with_genres=${genres}&vote_average.gte=${ratingGt}&vote_average.lte=${ratingLt}&primary_release_date.gte=${releaseDateGte}&primary_release_date.lte=${releaseDateLte}&sort_by=${sortBy}`;
 };
 
 export const signUpEndPoint = () => {
