@@ -251,9 +251,6 @@ const Explore = () => {
                         "& .Mui-selected:hover": {
                           backgroundColor: "#1565c0 !important",
                         },
-                        "& .MuiMenuItem-root:hover": {
-                          backgroundColor: "#2a2a40",
-                        },
                       },
                     },
                   }}
