@@ -119,7 +119,13 @@ const MovieDetails = () => {
     };
 
     fetchAll();
-  }, [token]);
+  }, [token, id]);
+
+
+  useEffect(() => {
+  window.scrollTo({ top: 0, behavior: "smooth" });
+}, [id]);
+
 
   return (
     <>
