@@ -47,6 +47,7 @@ const Explore = () => {
   const [showFilters, setShowFilters] = useState(false);
   const [loading, setLoading] = useState(false);
   const [initialLoading, setInitialLoading] = useState(true);
+  const [resettingFilters, setResettingFilters] = useState(false);
 
   const isLoadingRef = useRef(false);
   const lastRequestRef = useRef(null);
@@ -206,8 +207,18 @@ const Explore = () => {
     setReleaseDateLessThan(null);
     setSortBy(null);
     setPage(1);
-    fetchDiscoverdData(1, true);
+    setResettingFilters(true);
   };
+
+
+  useEffect(() => {
+  if (resettingFilters) {
+    setPage(1);
+    fetchDiscoverdData(1, true);
+    setResettingFilters(false);
+  }
+}, [resettingFilters, fetchDiscoverdData]);
+
 
   return (
     <Background>
