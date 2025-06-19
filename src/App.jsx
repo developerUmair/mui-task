@@ -13,7 +13,7 @@ import TopRatedMovies from "./pages/TopRatedMovies";
 import TrendingMovies from "./pages/TrendingMovies";
 import AuthLayout from "./layout/AuthLayout";
 import AppLayout from "./layout/AppLayout";
-import ProtectedRoute from "./components/ProtectedRoute";
+import ProtectedRoute from "./components/ProtectedRoute.jsx";
 
 function App() {
   return (
