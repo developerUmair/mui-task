@@ -1,19 +1,19 @@
 import "./App.css";
-import Layout from "./Layout";
 import { Route, Routes } from "react-router-dom";
 import MovieDetails from "./pages/MovieDetails";
 import Explore from "./pages/Explore";
 import Movies from "./pages/Movies";
 import TvShows from "./pages/TvShows";
 import SignUp from "./pages/SignUp";
-import AuthLayout from "./AuthLayout";
-import ProtectedRoute from "./Components/ProtectedRoute";
+import ProtectedRoute from "./components/ProtectedRoute";
 import SignIn from "./pages/SignIn";
 import Profile from "./pages/Profile";
 import Home from "./pages/Home";
 import PopularMovies from "./pages/PopularMovies";
 import TopRatedMovies from "./pages/TopRatedMovies";
 import TrendingMovies from "./pages/TrendingMovies";
+import AuthLayout from "./layout/AuthLayout";
+import AppLayout from "./layout/AppLayout";
 
 function App() {
 
@@ -22,7 +22,7 @@ function App() {
       <Route
         element={
           <ProtectedRoute>
-            <Layout />
+            <AppLayout />
           </ProtectedRoute>
         }
       >

@@ -18,14 +18,14 @@ import {
   getRecommendations,
   getSimilar,
 } from "../services";
-import { Background, formatDate, formatRuntime } from "../utils";
-import TrailerModal from "../Components/TrailerModal";
+import { Background, formatDate, formatRuntime } from "../utils/helpers";
+import TrailerModal from "../components/TrailerModal";
 import { AuthContext } from "../context/AuthContext";
-import CastCard from "../Components/CastCard";
+import CastCard from "../components/CastCard";
 import Slider from "react-slick";
-import SectionTitle from "../Components/SectionTitle";
-import Loader from "../Components/Loader";
-import MoviesSlider from "../Components/MoviesSlider";
+import SectionTitle from "../components/SectionTitle";
+import Loader from "../components/Loader";
+import MoviesSlider from "../components/MoviesSlider";
 
 var settings = {
   infinite: false,

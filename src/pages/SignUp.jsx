@@ -6,9 +6,9 @@ import {
   Paper,
   Typography,
 } from "@mui/material";
-import ReusableInput from "../Components/ReusableInput";
+import ReusableInput from "../components/ReusableInput";
 import { useContext, useState } from "react";
-import { Background } from "../utils";
+import { Background } from "../utils/helpers";
 import { signUp } from "../services";
 import { Link, useNavigate } from "react-router-dom";
 import { AuthContext } from "../context/AuthContext";

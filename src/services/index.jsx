@@ -14,7 +14,7 @@ import {
   trendingEndPoint,
   upComingMoviesEndPoint,
   videosEndPoint,
-} from "../EndPoints";
+} from "./config/index";
 
 export async function post(endPoint, data = {}) {
   try {

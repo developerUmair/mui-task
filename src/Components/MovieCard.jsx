@@ -12,7 +12,7 @@ import {
 } from "@mui/material";
 import PlaylistAddIcon from "@mui/icons-material/PlaylistAdd";
 import { useNavigate } from "react-router-dom";
-import { formatDate } from "../utils";
+import { formatDate } from "../utils/helpers";
 
 const MovieCard = ({ movie }) => {
   const navigate = useNavigate();

@@ -1,8 +1,8 @@
 import React, { useContext } from "react";
-import { Background } from "../utils";
-import SectionTitle from "../Components/SectionTitle";
-import Loader from "../Components/Loader";
-import MoviesSlider from "../Components/MoviesSlider";
+import { Background } from "../utils/helpers";
+import SectionTitle from "../components/SectionTitle";
+import Loader from "../components/Loader";
+import MoviesSlider from "../components/MoviesSlider";
 import { moviesContext } from "../context/MoviesDataContext";
 
 const TrendingMovies = () => {

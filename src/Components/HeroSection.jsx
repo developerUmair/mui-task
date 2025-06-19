@@ -11,7 +11,7 @@ import {
 import SearchIcon from "@mui/icons-material/Search";
 import { keyframes } from "@emotion/react";
 import Loader from "./Loader";
-import { Background } from "../utils";
+import { Background } from "../utils/helpers";
 import SectionTitle from "./SectionTitle";
 import MoviesSlider from "./MoviesSlider";
 import { moviesContext } from "../context/MoviesDataContext";

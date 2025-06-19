@@ -1,4 +1,4 @@
-import { Background } from "../utils";
+import { Background } from "../utils/helpers";
 import {
   Card,
   CardContent,

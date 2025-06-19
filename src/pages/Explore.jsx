@@ -26,10 +26,10 @@ import {
 import { moviesContext } from "../context/MoviesDataContext";
 import { useLocation } from "react-router-dom";
 import { getDiscoveredMoviesAndTvShows, getGenras } from "../services";
-import MovieCard from "../Components/MovieCard";
-import { Background, sortOptions } from "../utils";
+import MovieCard from "../components/MovieCard";
+import { Background, sortOptions } from "../utils/helpers";
 import Slider from "@mui/material/Slider";
-import Loader from "../Components/Loader";
+import Loader from "../components/Loader";
 
 const Explore = () => {
   const location = useLocation();
