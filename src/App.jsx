@@ -5,7 +5,6 @@ import Explore from "./pages/Explore";
 import Movies from "./pages/Movies";
 import TvShows from "./pages/TvShows";
 import SignUp from "./pages/SignUp";
-import ProtectedRoute from "./components/ProtectedRoute.jsx";
 import SignIn from "./pages/SignIn";
 import Profile from "./pages/Profile";
 import Home from "./pages/Home";
@@ -14,6 +13,7 @@ import TopRatedMovies from "./pages/TopRatedMovies";
 import TrendingMovies from "./pages/TrendingMovies";
 import AuthLayout from "./layout/AuthLayout";
 import AppLayout from "./layout/AppLayout";
+import ProtectedRoute from './components/ProtectedRoute';
 
 function App() {
 
