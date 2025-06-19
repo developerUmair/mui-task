@@ -5,7 +5,7 @@ import {
   Paper,
   Typography,
 } from "@mui/material";
-import ReusableInput from "../components/ReusableInput";
+import ReusableInput from "../Components/ReusableInput";
 import { useContext, useState } from "react";
 import { Background } from "../utils/helpers";
 import { signIn } from "../services";

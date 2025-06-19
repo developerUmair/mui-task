@@ -1,9 +1,9 @@
 import React, { useContext } from "react";
 import { Background } from "../utils/helpers";
-import SectionTitle from "../components/SectionTitle";
+import SectionTitle from "../Components/SectionTitle";
 import { moviesContext } from "../context/MoviesDataContext";
-import MoviesSlider from "../components/MoviesSlider";
-import Loader from "../components/Loader";
+import MoviesSlider from "../Components/MoviesSlider";
+import Loader from "../Components/Loader";
 
 const PopularMovies = () => {
   const { popularMovies, loading, popularCategory, setPopularCategory } =

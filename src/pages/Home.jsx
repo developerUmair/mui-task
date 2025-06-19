@@ -1,5 +1,5 @@
 import React, { useContext } from "react";
-import HeroSection from "../components/HeroSection";
+import HeroSection from "../Components/HeroSection";
 import { moviesContext } from "../context/MoviesDataContext";
 
 const Home = () => {
