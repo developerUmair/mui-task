@@ -210,15 +210,13 @@ const Explore = () => {
     setResettingFilters(true);
   };
 
-
   useEffect(() => {
-  if (resettingFilters) {
-    setPage(1);
-    fetchDiscoverdData(1, true);
-    setResettingFilters(false);
-  }
-}, [resettingFilters, fetchDiscoverdData]);
-
+    if (resettingFilters) {
+      setPage(1);
+      fetchDiscoverdData(1, true);
+      setResettingFilters(false);
+    }
+  }, [resettingFilters, fetchDiscoverdData]);
 
   return (
     <Background>
@@ -436,7 +434,11 @@ const Explore = () => {
         </Typography>
         <Grid container spacing={2} mt={2}>
           {discoverdData?.map((movie, index) => (
-            <Grid item key={`${movie.id}-${index}`} xs={12} md={6} lg={4}>
+            <Grid
+              item
+              key={`${movie.id}-${index}`}
+              size={{ xs: 12, md: 6, lg: 3 }}
+            >
               <MovieCard movie={movie} />
             </Grid>
           ))}
